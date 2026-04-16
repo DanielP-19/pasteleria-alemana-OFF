@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Inventario - Pastelería Alemana</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Pastelería Alemana</h2>
+    <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+    </ul>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+</div>
+
+<div class="main">
+    <h1>Gestión de Inventario</h1>
+
+    <div class="form-container">
+        <h3>Agregar Producto</h3>
+        <input type="text" id="nombre" placeholder="Nombre">
+        <input type="text" id="categoria" placeholder="Categoría">
+        <input type="number" id="precio" placeholder="Precio">
+        <input type="number" id="stock" placeholder="Stock">
+        <select id="estado">
+            <option value="">Estado</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+        </select>
+        <select id="tipo">
+            <option value="">Tipo</option>
+            <option value="Insumo">Insumo</option>
+            <option value="Vitrina">Vitrina</option>
+        </select>
+        <button onclick="agregarProducto()">Agregar</button>
+        <p id="mensaje"></p>
+    </div>
+
+    <h3>Lista de Productos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Estado</th>
+                <th>Tipo</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="tablaProductos"></tbody>
+    </table>
+
+</div>
+
+<script src=".js/inventario.js"></script>
+</body>
+</html>

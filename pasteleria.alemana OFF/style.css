@@ -1,0 +1,472 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.login-body {
+    background: linear-gradient(to right, #6b3e26, #c8a27c);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #6b3e26;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
+
+body:not(.login-body) {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #6b3e26;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    background: var(--accent-color);
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar button {
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    background-color: #4e2d1b;
+    border: none;
+    color: white;
+}
+
+.main {
+    flex: 1;
+    padding: 40px;
+    background-color: #f4f4f4;
+}
+
+.cards {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+}
+
+.form-container {
+    background: white;
+    padding: 20px;
+    width: 400px;
+    margin-bottom: 30px;
+}
+
+.form-container input,
+.form-container select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table th {
+    background-color: #6b3e26;
+    color: white;
+}
+
+/* ==================== ESTILOS PARA MÓDULO DE VENTAS ==================== */
+.ventas-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.ventas-catalogo {
+    flex: 2;
+    min-width: 300px;
+}
+
+.ventas-filtros {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.ventas-filtros input, .ventas-filtros select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.ventas-filtros input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.ventas-filtros select {
+    min-width: 150px;
+}
+
+.ventas-productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.ventas-producto-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.ventas-producto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px var(--shadow-color);
+}
+
+.ventas-producto-imagen {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+}
+
+.ventas-producto-info {
+    padding: 15px;
+}
+
+.ventas-producto-nombre {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+}
+
+.ventas-producto-categoria {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.ventas-producto-precio {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.ventas-producto-stock {
+    font-size: 12px;
+    color: #27ae60;
+    margin-bottom: 10px;
+}
+
+.ventas-btn-agregar {
+    width: 100%;
+    padding: 10px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.ventas-btn-agregar:hover {
+    background: var(--hover-sidebar);
+}
+
+.ventas-carrito {
+    flex: 1;
+    min-width: 300px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.ventas-carrito h3 {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent-color);
+    color: var(--text-primary);
+}
+
+.ventas-carrito-vacio {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 40px 20px;
+}
+
+.ventas-carrito-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.ventas-carrito-item-imagen {
+    width: 50px;
+    height: 50px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.ventas-carrito-item-info {
+    flex: 1;
+}
+
+.ventas-carrito-item-nombre {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.ventas-carrito-item-precio {
+    font-size: 12px;
+    color: var(--accent-color);
+}
+
+.ventas-carrito-item-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.ventas-carrito-item-cantidad button {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.ventas-carrito-item-cantidad span {
+    min-width: 30px;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.ventas-carrito-item-subtotal {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ventas-carrito-item-eliminar {
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.ventas-carrito-total {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid var(--border-color);
+    text-align: right;
+    color: var(--text-primary);
+}
+
+.ventas-carrito-total .total-monto {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+.ventas-metodos-pago {
+    margin-top: 20px;
+}
+
+.ventas-metodos-pago select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.ventas-btn-finalizar {
+    width: 100%;
+    padding: 14px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.ventas-btn-finalizar:hover {
+    background: #219653;
+}
+
+.ventas-modal-ticket {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.ventas-modal-content {
+    background: var(--bg-modal);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: var(--text-primary);
+}
+
+.ventas-ticket {
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.ventas-ticket-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.ventas-ticket-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.ventas-ticket-total {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-color);
+    font-weight: bold;
+}
+
+.ventas-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.ventas-btn-imprimir {
+    flex: 1;
+    padding: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.ventas-btn-cerrar-modal {
+    flex: 1;
+    padding: 10px;
+    background: #95a5a6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .ventas-container {
+        flex-direction: column;
+    }
+    .ventas-carrito {
+        position: static;
+        order: -1;
+    }
+
+    #ventasClearSearch:hover {
+    color: var(--text-primary) !important;
+}
+}

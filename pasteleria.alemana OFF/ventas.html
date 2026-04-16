@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas - Pastelería Alemana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f5f0;
+            color: #333;
+        }
+
+        .header {
+            background: #6b3f2e;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 28px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #e74c3c;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .catalogo {
+            flex: 2;
+        }
+
+        .filtros {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filtros input, .filtros select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            background: white;
+        }
+
+        .filtros input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filtros select {
+            min-width: 150px;
+        }
+
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .producto-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .producto-imagen {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .producto-info {
+            padding: 15px;
+        }
+
+        .producto-nombre {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .producto-categoria {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .producto-precio {
+            font-size: 20px;
+            font-weight: 700;
+            color: #6b3f2e;
+            margin-bottom: 10px;
+        }
+
+        .producto-stock {
+            font-size: 12px;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        .producto-stock.agotado {
+            color: #e74c3c;
+        }
+
+        .btn-agregar {
+            width: 100%;
+            padding: 10px;
+            background: #6b3f2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-agregar:hover {
+            background: #8b5a3c;
+        }
+
+        .btn-agregar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .carrito {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .carrito h3 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #6b3f2e;
+        }
+
+        .carrito-vacio {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+        }
+
+        .carrito-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .carrito-item-imagen {
+            width: 50px;
+            height: 50px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .carrito-item-info {
+            flex: 1;
+        }
+
+        .carrito-item-nombre {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .carrito-item-precio {
+            font-size: 12px;
+            color: #6b3f2e;
+        }
+
+        .carrito-item-cantidad {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .carrito-item-cantidad button {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .carrito-item-cantidad span {
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .carrito-item-subtotal {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .carrito-item-eliminar {
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .carrito-total {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+            text-align: right;
+        }
+
+        .carrito-total span:first-child {
+            font-weight: 600;
+        }
+
+        .carrito-total .total-monto {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6b3f2e;
+        }
+
+        .metodos-pago {
+            margin-top: 20px;
+        }
+
+        .metodos-pago select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-finalizar {
+            width: 100%;
+            padding: 14px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-finalizar:hover {
+            background: #219653;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .ticket {
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .ticket-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .ticket-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .ticket-total {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+            font-weight: bold;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-imprimir {
+            flex: 1;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-cerrar {
+            flex: 1;
+            padding: 10px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            .carrito {
+                position: static;
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <h1>🍰 Pastelería Alemana</h1>
+        <p>El sabor tradicional alemán</p>
+    </div>
+    <div class="cart-icon" onclick="abrirCarrito()">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
+</div>
+
+<div class="container">
+    <div class="catalogo">
+        <div class="filtros">
+            <input type="text" id="searchProducto" placeholder="🔍 Buscar producto..." onkeyup="filtrarProductos()">
+            <select id="filtroCategoria" onchange="filtrarProductos()">
+                <option value="">Todas las categorías</option>
+                <option value="Torta">Torta</option>
+                <option value="Pastel">Pastel</option>
+                <option value="Tarta">Tarta</option>
+                <option value="Galleta">Galleta</option>
+                <option value="Postre frío">Postre frío</option>
+                <option value="Chocolate">Chocolate</option>
+                <option value="Dona">Dona</option>
+                <option value="Cupcake">Cupcake</option>
+            </select>
+        </div>
+        <div id="productosGrid" class="productos-grid"></div>
+    </div>
+
+    <div id="carritoPanel" class="carrito">
+        <h3>🛒 Mi Pedido</h3>
+        <div id="carritoVacio" class="carrito-vacio">
+            <i class="fas fa-shopping-basket" style="font-size: 48px; margin-bottom: 10px;"></i>
+            <p>Tu carrito está vacío</p>
+            <p style="font-size: 12px;">Agrega productos para comenzar</p>
+        </div>
+        <div id="carritoItems" style="display: none;"></div>
+        <div id="carritoResumen"></div>
+        <div id="carritoTotal" class="carrito-total" style="display: none;"></div>
+        <div id="metodosPago" class="metodos-pago" style="display: none;">
+            <select id="metodoPago">
+                <option value="">Seleccione método de pago</option>
+                <option value="Efectivo">💰 Efectivo</option>
+                <option value="Yappy">📱 Yappy</option>
+                <option value="Visa">💳 Visa</option>
+                <option value="Mastercard">💳 Mastercard</option>
+                <option value="ACH">🏦 Transferencia ACH</option>
+            </select>
+            <button class="btn-finalizar" onclick="finalizarVenta()">✅ Finalizar Compra</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalTicket" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 15px;">🧾 Ticket de Venta</h3>
+        <div id="ticketContenido" class="ticket"></div>
+        <div class="modal-buttons">
+            <button class="btn-imprimir" onclick="imprimirTicket()">🖨️ Imprimir</button>
+            <button class="btn-cerrar" onclick="cerrarModalTicket()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script
+
+    <script>
+    // Aquí pegas TODO el contenido de ventas.js
+    let productos = [];
+    let carrito = [];
+    let productosOriginales = [];
+
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarProductos();
+    });
+
+    function cargarProductos() {
+        const stored = localStorage.getItem("productos");
+        if (stored) {
+            productosOriginales = JSON.parse(stored);
+            productos = productosOriginales.filter(p => p.estado !== "Agotado" && p.cantidad > 0);
+        } else {
+            productos = [
+                { nombre: "Pastel de Chocolate", categoria: "Pastel", precio: 25.99, cantidad: 10, imagen: "🍰", presentacion: "Pastel completo", estado: "Disponible" },
+                { nombre: "Torta de Fresa", categoria: "Torta", precio: 18.50, cantidad: 8, imagen: "🍓", presentacion: "Porción", estado: "Disponible" },
+                { nombre: "Cupcake de Vainilla", categoria: "Cupcake", precio: 2.99, cantidad: 15, imagen: "🧁", presentacion: "Unidad", estado: "Disponible" },
+                { nombre: "Galletas de Mantequilla", categoria: "Galleta", precio: 12.99, cantidad: 25, imagen: "🍪", presentacion: "Docena", estado: "Disponible" },
+                { nombre: "Cheesecake de Maracuyá", categoria: "Postre frío", precio: 6.50, cantidad: 5, imagen: "🍰", presentacion: "Porción", estado: "Disponible" },
+                { nombre: "Tarta de Manzana", categoria: "Tarta", precio: 15.99, cantidad: 4, imagen: "🍎", presentacion: "Pastel completo", estado: "Disponible" },
+                { nombre: "Dona Glaseada", categoria: "Dona", precio: 1.99, cantidad: 20, imagen: "🍩", presentacion: "Unidad", estado: "Disponible" }
+            ];
+            productosOriginales = [...productos];
+            localStorage.setItem("productos", JSON.stringify(productosOriginales));
+        }
+        mostrarProductos();
+    }
+
+    function mostrarProductos() {
+        const grid = document.getElementById('productosGrid');
+        if (!grid) return;
+
+        const searchTerm = document.getElementById('searchProducto')?.value.toLowerCase() || '';
+        const categoriaFiltro = document.getElementById('filtroCategoria')?.value || '';
+
+        let productosFiltrados = productos.filter(p => {
+            const matchesSearch = p.nombre.toLowerCase().includes(searchTerm);
+            const matchesCategoria = categoriaFiltro === '' || p.categoria === categoriaFiltro;
+            return matchesSearch && matchesCategoria;
+        });
+
+        if (productosFiltrados.length === 0) {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;">No se encontraron productos</div>`;
+            return;
+        }
+
+        grid.innerHTML = productosFiltrados.map(p => `
+            <div class="producto-card">
+                <div class="producto-imagen">${p.imagen || '🍰'}</div>
+                <div class="producto-info">
+                    <div class="producto-nombre">${p.nombre}</div>
+                    <div class="producto-categoria">${p.categoria} • ${p.presentacion || 'Unidad'}</div>
+                    <div class="producto-precio">$${p.precio.toFixed(2)}</div>
+                    <div class="producto-stock">📦 Stock: ${p.cantidad} unidades</div>
+                    <button class="btn-agregar" onclick="agregarAlCarrito('${p.nombre.replace(/'/g, "\\'")}')">➕ Agregar al carrito</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function filtrarProductos() {
+        mostrarProductos();
+    }
+
+    function agregarAlCarrito(nombreProducto) {
+        const producto = productos.find(p => p.nombre === nombreProducto);
+        if (!producto) {
+            mostrarNotificacion('Producto no encontrado', 'error');
+            return;
+        }
+
+        const itemEnCarrito = carrito.find(item => item.nombre === nombreProducto);
+        
+        if (itemEnCarrito) {
+            if (itemEnCarrito.cantidad + 1 > producto.cantidad) {
+                mostrarNotificacion(`Stock insuficiente. Solo quedan ${producto.cantidad} unidades`, 'error');
+                return;
+            }
+            itemEnCarrito.cantidad++;
+            itemEnCarrito.subtotal = itemEnCarrito.cantidad * itemEnCarrito.precio;
+        } else {
+            if (1 > producto.cantidad) {
+                mostrarNotificacion(`Stock insuficiente`, 'error');
+                return;
+            }
+            carrito.push({
+                nombre: producto.nombre,
+                precio: producto.precio,
+                cantidad: 1,
+                subtotal: producto.precio,
+                imagen: producto.imagen || '🍰'
+            });
+        }
+
+        producto.cantidad--;
+        actualizarCarrito();
+        mostrarNotificacion(`${producto.nombre} agregado al carrito`, 'success');
+    }
+
+    function actualizarCarrito() {
+        const cartCount = document.getElementById('cartCount');
+        const carritoVacio = document.getElementById('carritoVacio');
+        const carritoItems = document.getElementById('carritoItems');
+        const carritoTotal = document.getElementById('carritoTotal');
+        const metodosPago = document.getElementById('metodosPago');
+
+        const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+        const totalMonto = carrito.reduce((sum, item) => sum + item.subtotal, 0);
+
+        if (cartCount) cartCount.textContent = totalItems;
+
+        if (carrito.length === 0) {
+            if (carritoVacio) carritoVacio.style.display = 'block';
+            if (carritoItems) carritoItems.style.display = 'none';
+            if (carritoTotal) carritoTotal.style.display = 'none';
+            if (metodosPago) metodosPago.style.display = 'none';
+            return;
+        }
+
+        if (carritoVacio) carritoVacio.style.display = 'none';
+        if (carritoItems) carritoItems.style.display = 'block';
+        if (carritoTotal) carritoTotal.style.display = 'block';
+        if (metodosPago) metodosPago.style.display = 'block';
+
+        if (carritoItems) {
+            carritoItems.innerHTML = carrito.map((item, index) => `
+                <div class="carrito-item">
+                    <div class="carrito-item-imagen">${item.imagen}</div>
+                    <div class="carrito-item-info">
+                        <div class="carrito-item-nombre">${item.nombre}</div>
+                        <div class="carrito-item-precio">$${item.precio.toFixed(2)} c/u</div>
+                        <div class="carrito-item-cantidad">
+                            <button onclick="modificarCantidad(${index}, -1)">-</button>
+                            <span>${item.cantidad}</span>
+                            <button onclick="modificarCantidad(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="carrito-item-subtotal">$${item.subtotal.toFixed(2)}</div>
+                    <div class="carrito-item-eliminar" onclick="eliminarDelCarrito(${index})">
+                        <i class="fas fa-trash"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        if (carritoTotal) {
+            carritoTotal.innerHTML = `
+                <span>Total:</span>
+                <span class="total-monto">$${totalMonto.toFixed(2)}</span>
+            `;
+        }
+    }
+
+    function modificarCantidad(index, delta) {
+        const item = carrito[index];
+        const producto = productos.find(p => p.nombre === item.nombre);
+        const nuevaCantidad = item.cantidad + delta;
+        
+        if (nuevaCantidad < 1) {
+            producto.cantidad += item.cantidad;
+            eliminarDelCarrito(index);
+            return;
+        }
+        
+        if (nuevaCantidad > producto.cantidad + item.cantidad) {
+            mostrarNotificacion(`Stock insuficiente. Solo quedan ${producto.cantidad} unidades`, 'error');
+            return;
+        }
+        
+        producto.cantidad = producto.cantidad + item.cantidad - nuevaCantidad;
+        item.cantidad = nuevaCantidad;
+        item.subtotal = item.cantidad * item.precio;
+        actualizarCarrito();
+    }
+
+    function eliminarDelCarrito(index) {
+        const item = carrito[index];
+        const producto = productos.find(p => p.nombre === item.nombre);
+        if (producto) producto.cantidad += item.cantidad;
+        carrito.splice(index, 1);
+        actualizarCarrito();
+        mostrarNotificacion(`${item.nombre} eliminado del carrito`, 'info');
+    }
+
+    function abrirCarrito() {
+        document.getElementById('carritoPanel')?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function finalizarVenta() {
+        const metodoPago = document.getElementById('metodoPago')?.value;
+        if (carrito.length === 0) return mostrarNotificacion('Agrega productos al carrito primero', 'error');
+        if (!metodoPago) return mostrarNotificacion('Selecciona un método de pago', 'error');
+        
+        for (let item of carrito) {
+            const producto = productos.find(p => p.nombre === item.nombre);
+            if (!producto || producto.cantidad < item.cantidad) {
+                return mostrarNotificacion(`Stock insuficiente para ${item.nombre}`, 'error');
+            }
+        }
+        
+        for (let item of carrito) {
+            const productoIndex = productosOriginales.findIndex(p => p.nombre === item.nombre);
+            if (productoIndex !== -1) {
+                productosOriginales[productoIndex].cantidad -= item.cantidad;
+                if (productosOriginales[productoIndex].cantidad === 0) {
+                    productosOriginales[productoIndex].estado = "Agotado";
+                } else if (productosOriginales[productoIndex].cantidad <= 10) {
+                    productosOriginales[productoIndex].estado = "Bajo stock";
+                }
+            }
+        }
+        
+        localStorage.setItem("productos", JSON.stringify(productosOriginales));
+        
+        const nuevaFactura = {
+            numero: Date.now(),
+            fecha: new Date().toLocaleString(),
+            metodo: metodoPago,
+            total: carrito.reduce((sum, item) => sum + item.subtotal, 0),
+            items: [...carrito]
+        };
+        
+        let facturas = JSON.parse(localStorage.getItem("facturas")) || [];
+        facturas.push(nuevaFactura);
+        localStorage.setItem("facturas", JSON.stringify(facturas));
+        
+        mostrarTicket(nuevaFactura);
+        carrito = [];
+        actualizarCarrito();
+        productos = productosOriginales.filter(p => p.estado !== "Agotado" && p.cantidad > 0);
+        mostrarProductos();
+    }
+
+    function mostrarTicket(factura) {
+        const fecha = new Date(factura.fecha).toLocaleString();
+        const itemsHTML = factura.items.map(item => `
+            <div class="ticket-item">
+                <span>${item.cantidad}x ${item.nombre}</span>
+                <span>$${item.subtotal.toFixed(2)}</span>
+            </div>
+        `).join('');
+        
+        const ticketHTML = `
+            <div class="ticket">
+                <div class="ticket-header">
+                    <h3>🍰 Pastelería Alemana</h3>
+                    <p>${fecha}</p>
+                    <p>Ticket #${factura.numero}</p>
+                    <p>Método: ${factura.metodo}</p>
+                </div>
+                ${itemsHTML}
+                <div class="ticket-total">
+                    <div class="ticket-item">
+                        <strong>TOTAL</strong>
+                        <strong>$${factura.total.toFixed(2)}</strong>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-size: 11px;">
+                    ¡Gracias por tu compra!
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('ticketContenido').innerHTML = ticketHTML;
+        document.getElementById('modalTicket').style.display = 'flex';
+        mostrarNotificacion('¡Venta completada con éxito!', 'success');
+    }
+
+    function cerrarModalTicket() {
+        document.getElementById('modalTicket').style.display = 'none';
+    }
+
+    function imprimirTicket() {
+        const contenido = document.getElementById('ticketContenido')?.innerHTML;
+        if (!contenido) return;
+        
+        const ventana = window.open('', '_blank');
+        ventana.document.write(`
+            <html><head><title>Ticket</title>
+            <style>body{font-family:monospace;padding:20px}.ticket{max-width:300px;margin:0 auto}.ticket-header{text-align:center;border-bottom:1px dashed #000;margin-bottom:15px}.ticket-item{display:flex;justify-content:space-between}.ticket-total{border-top:1px dashed #000;margin-top:10px;padding-top:5px}</style>
+            </head><body><div class="ticket">${contenido}</div><script>window.print();<\/script></body></html>
+        `);
+        ventana.document.close();
+    }
+
+    function mostrarNotificacion(mensaje, tipo = 'info') {
+        const toast = document.createElement('div');
+        const colores = { 
+            success: '#27ae60', 
+            error: '#e74c3c', 
+            info: '#3498db', 
+            warning: '#f39c12' 
+        };
+        toast.style.cssText = `position:fixed;bottom:20px;right:20px;background:${colores[tipo]};color:white;padding:12px 20px;border-radius:8px;z-index:1000`;
+        toast.textContent = mensaje;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Estilos para animaciones (si no los tienes en CSS)
+    if (!document.querySelector('#toast-styles')) {
+        const style = document.createElement('style');
+        style.id = 'toast-styles';
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+</script>
+</body>
+</html>

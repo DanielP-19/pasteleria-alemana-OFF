@@ -1,0 +1,4255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema - Pastelería Alemana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+    --bg-primary: #e9d2b0;
+    --bg-sidebar: #6b3f2e;
+    --bg-card: #ffffff;
+    --bg-topbar: #ffffff;
+    --bg-modal: #ffffff;
+    
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    
+    --accent-color: #d4a373;
+    --border-color: #e0d5cc;
+    --hover-sidebar: #8b5a3c;
+    
+    --success-color: #5c8c5c;
+    --warning-color: #e0a800;
+    --error-color: #b84a4a;
+    
+    --input-bg: #ffffff;
+    --toast-bg: #ffffff;
+
+    --btn-filtros-bg: #d4a373;
+}
+
+        body.dark-mode {
+    --bg-primary: #1a1a1a;
+    --bg-sidebar: #2d2d2d;
+    --bg-card: #333333;
+    --bg-topbar: #2d2d2d;
+    --bg-modal: #2d2d2d;
+    
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    
+    --accent-color: #d4a373;
+    --border-color: #404040;
+    --hover-sidebar: #2a2a2a;
+    
+    --input-bg: #404040;
+    --toast-bg: #333333;
+
+    --btn-filtros-bg: #4a4a4a;
+}
+
+.sidebar ul li.activo {
+    background: var(--hover-sidebar) !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border-left: 4px solid white;
+}
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: var(--bg-sidebar);
+            color: var(--text-primary);
+            padding: 30px 20px;
+            position: fixed;
+            overflow-y: auto;
+            transition: background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            color: #ffffff;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
+        }
+        
+        .sidebar ul { 
+            list-style: none; 
+            flex: 1;
+        }
+        
+        .sidebar ul li {
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            background: var(--accent-color);
+            color: white;
+            transition: .3s;
+        }
+
+        .sidebar ul li:hover { 
+            background: var(--hover-sidebar); 
+        }
+
+body.dark-mode .sidebar ul li {
+    background: #4a4a4a;
+}
+
+body.dark-mode .sidebar ul li:hover {
+    background: #5a5a5a;
+}
+
+        .theme-switch-container {
+            margin-top: auto;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+            content: "";
+        }
+
+        .theme-text {
+            font-size: 14px;
+            color: #ffffff;
+            vertical-align: middle;
+            font-weight: 500;
+        }
+
+        .main {
+            margin-left: 240px;
+            width: 100%;
+        }
+
+        .topbar {
+            background: var(--bg-topbar);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .logout {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-right: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.logout::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.logout:active::after {
+    width: 200px;
+    height: 200px;
+}
+
+.logout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+    background: #c0392b;
+}
+
+        .content { 
+            padding: 30px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        textarea {
+            height: 100px;
+            min-height: 70px;
+            max-height: 70px;
+            resize: none;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .btn-primary { background: #3498db; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-success { background: #27ae60; color: white; }
+
+        .btn-pdf {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-right: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+        
+        .btn-pdf::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-pdf:active::after {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .btn-pdf:hover {
+            transform: translateY(-2px);
+            background: #8e44ad;
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+        }
+        
+        .btn-pdf:hover {
+            background: #229954;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        body.modal-abierto {
+            overflow: hidden;
+        }
+
+        .modal-content {
+            background: var(--bg-modal);
+            padding: 35px;
+            width: 500px;
+            border-radius: 8px;
+            max-height: 80vh;
+            overflow: auto;
+            color: var(--text-primary);
+            transition: background-color 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .modal-confirm {
+            background: var(--bg-modal);
+            padding: 30px;
+            width: 380px;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .modal-confirm .icono {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .modal-confirm .icono.warning {
+            color: #f39c12;
+        }
+
+        .modal-confirm h3 {
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .modal-confirm p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .modal-confirm .botones {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-confirm button {
+            padding: 10px 20px;
+            min-width: 100px;
+        }
+
+        .producto-imagen {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+        }
+
+        .producto-header {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .lista-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 14px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .lista-card:hover {
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        #modalDetalle .lista-card {
+            box-shadow: none;
+            transform: none;
+            cursor: default;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            animation: none;  /* 👈 ESTO YA QUITA LA ANIMACIÓN */
+        }
+        
+        #modalDetalle .lista-card:hover {
+            box-shadow: none;
+            transform: none;
+        }
+
+        body.dark-mode #listaFacturas .lista-card:hover {
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
+        }
+
+        .lista-info {
+            display: grid;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .lista-info span {
+            color: var(--text-primary);
+            font-size: 14px;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .lista-botones {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .imagen-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 2px dashed var(--border-color);
+            padding: 10px;
+            margin-bottom: 10px;
+            background: var(--input-bg);
+        }
+
+        body.dark-mode .imagen-preview {
+            background: #404040;
+            border-color: #666;
+        }
+
+        body.dark-mode .imagen-preview[src*="Sin imagen"] {
+            filter: invert(0.8);
+        }
+
+        .imagen-preview-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+.btn-imagen {
+    background: #f39c12;
+    color: white;
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-imagen::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-imagen:active::after {
+    width: 200px;
+    height: 200px;
+}
+
+.btn-imagen:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+    background: #e67e22;
+}
+
+        .seccion-titulo {
+            margin-bottom: 25px;
+        }
+
+        .total-box {
+            background: var(--bg-card);
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .separador-decorativo {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 30px 0;
+            color: var(--text-secondary);
+        }
+
+        .separador-decorativo::before,
+        .separador-decorativo::after {
+            content: '';
+            flex: 1;
+            border-bottom: 2px solid var(--accent-color);
+            margin: 0 15px;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+
+        .separador-decorativo:hover::before,
+        .separador-decorativo:hover::after {
+            opacity: 0.8;
+        }
+
+        .separador-decorativo span {
+            padding: 0 15px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: var(--bg-card);
+            padding: 8px 20px;
+            border-radius: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .separador-delgado {
+            margin: 20px 0;
+        }
+
+        .separador-delgado::before,
+        .separador-delgado::after {
+            border-bottom-width: 1px;
+        }
+
+        .separador-puntos {
+            margin: 25px 0;
+        }
+
+        .separador-puntos::before,
+        .separador-puntos::after {
+            border-bottom: 2px dotted var(--accent-color);
+        }
+
+        .separador-icono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        .separador-icono .linea {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+        }
+
+        .separador-icono i {
+            margin: 0 15px;
+            color: var(--accent-color);
+            font-size: 20px;
+            background: var(--bg-card);
+            padding: 5px;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .filtros-avanzados {
+            background: var(--bg-card);
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            font-size: 12px;
+            box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .filtros-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 0;
+            margin-bottom: 3px;
+            cursor: pointer;
+        }
+
+        .filtros-header h3 {
+            margin: 0;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .filtros-header span {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .filtros-panel {
+            display: block;
+        }
+
+        .filtros-panel .grid-2 {
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .filtros-panel label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .filtros-panel input, .filtros-panel select {
+            padding: 6px;
+            font-size: 12px;
+            margin-bottom: 0;
+        }
+
+        .filtros-acciones {
+            display: flex;
+            gap: 12px;
+            margin: 8px 0;
+        }
+
+        .filtros-acciones button {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .resultados-info {
+            margin-top: 8px;
+            padding: 8px;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 12px;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--toast-bg);
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            max-width: 400px;
+            animation: slideIn 0.3s ease forwards;
+            pointer-events: auto;
+            color: var(--text-primary);
+            border-left: 4px solid;
+        }
+
+        .toast.success { border-left-color: #27ae60; }
+        .toast.error { border-left-color: #e74c3c; }
+        .toast.warning { border-left-color: #f39c12; }
+        .toast.info { border-left-color: #3498db; }
+
+        .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast.success .toast-icon { color: #27ae60; }
+        .toast.error .toast-icon { color: #e74c3c; }
+        .toast.warning .toast-icon { color: #f39c12; }
+        .toast.info .toast-icon { color: #3498db; }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0 4px;
+        }
+
+        .toast-close:hover {
+            color: var(--text-primary);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .toast.fade-out {
+            animation: slideOut 0.3s ease forwards;
+        }
+
+.campo-error {
+    border: 2px solid #e74c3c !important;
+    background-color: #fff1f0 !important;
+    color: #2c3e50 !important;
+    animation: pulseError 1s ease;
+    position: relative;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23e74c3c"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    background-size: 20px;
+    padding-right: 40px !important;
+}
+
+select.campo-error {
+    border: 2px solid #e74c3c !important;
+    background-color: #fff1f0 !important;
+    background-image: none !important;
+}
+
+body.dark-mode select.campo-error {
+    background-color: #4a1e1e !important;
+    border: 2px solid #ff6b6b !important;
+    background-image: none !important;
+}
+
+body.dark-mode .campo-error {
+    background-color: #4a1e1e !important;
+    border: 2px solid #ff6b6b !important;
+    color: #ffffff !important;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23ff6b6b"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>');
+}
+
+.campo-error:focus {
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.25) !important;
+    border-color: #c0392b !important;
+}
+
+body.dark-mode .campo-error:focus {
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.4) !important;
+    border-color: #ff6b6b !important;
+}
+
+@keyframes pulseError {
+    0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(231, 76, 60, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+}
+
+body.dark-mode .campo-error {
+    animation: pulseErrorDark 1s ease;
+}
+
+@keyframes pulseErrorDark {
+    0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(255, 107, 107, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+}
+
+        @media (max-width: 900px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .sidebar { width: 200px; }
+            .main { margin-left: 200px; }
+        }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-primary, .btn-warning, .btn-danger, .btn-success {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 1400px) {
+    .content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+    
+    .grid-2 {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    
+    input, select, textarea {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+    
+    .lista-card {
+        padding: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .producto-header {
+        flex: 1;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+    }
+    
+    .producto-imagen {
+        width: 100px;
+        height: 100px;
+        flex-shrink: 0;
+    }
+    
+    .lista-info {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px 20px;
+    }
+    
+    .lista-info span {
+        padding: 5px 0;
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .lista-botones {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        min-width: 160px;
+        justify-content: flex-end;
+        align-self: center;
+    }
+    
+    .lista-botones button {
+        width: auto;
+        padding: 8px 16px;
+        margin-right: 0;
+        white-space: nowrap;
+    }
+}
+
+@media (min-width: 1800px) {
+    .content {
+        max-width: 1600px;
+    }
+    
+    .lista-info {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+#inventario .grid-2 {
+    margin-bottom: 5px;
+}
+
+#inventario label {
+    font-size: 13px;
+    margin-bottom: 3px;
+    color: var(--text-secondary);
+}
+
+#inventario input, #inventario select {
+    margin-bottom: 15px;
+}
+
+.campo-grupo {
+    background: var(--bg-primary);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.campo-grupo h4 {
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    font-size: 16px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+@media (min-width: 1800px) {
+    .content {
+        max-width: 1500px;
+    }
+    
+    .lista-info {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.btn-primary::after, .btn-warning::after, .btn-danger::after, .btn-success::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-primary:active::after, .btn-warning:active::after, .btn-danger:active::after, .btn-success:active::after {
+    width: 200px;
+    height: 200px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+}
+
+body.dark-mode .lista-card {
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .lista-card:hover {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .modal-content {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .topbar {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .total-box {
+    box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .filtros-avanzados {
+    box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .toast {
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5);
+}
+
+.bajo-stock {
+    border: 2px solid #e74c3c !important;
+    background-color: #fff1f0 !important;
+    animation: pulseBajoStock 1.5s infinite ease;
+    position: relative;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23e74c3c"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    padding-right: 40px !important;
+}
+
+@keyframes pulseBajoStock {
+    0% {
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+    }
+}
+
+body.dark-mode .bajo-stock {
+    border: 2px solid #ff6b6b !important;
+    background-color: #4a1e1e !important;
+    color: #ffffff !important;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23ff6b6b"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>');
+}
+
+.lista-card .lista-info span:only-child {
+    border-bottom: none !important;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+}
+
+.lista-card:has(.lista-info span:only-child) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 10px;
+    width: 100%;
+}
+
+.lista-card:has(.lista-info span:only-child) .lista-info {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* ==================== ESTILOS PARA MÓDULO DE VENTAS ==================== */
+.ventas-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.ventas-catalogo {
+    flex: 2;
+    min-width: 300px;
+}
+
+.ventas-filtros {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.ventas-filtros input, .ventas-filtros select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.ventas-filtros input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.ventas-filtros select {
+    min-width: 150px;
+}
+
+.ventas-productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.ventas-producto-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.ventas-producto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px var(--shadow-color);
+}
+
+.ventas-producto-imagen {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+}
+
+.ventas-producto-info {
+    padding: 15px;
+}
+
+.ventas-producto-nombre {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+}
+
+.ventas-producto-categoria {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.ventas-producto-precio {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.ventas-producto-stock {
+    font-size: 12px;
+    color: #27ae60;
+    margin-bottom: 10px;
+}
+
+.ventas-btn-agregar {
+    width: 100%;
+    padding: 10px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.ventas-btn-agregar:hover {
+    background: var(--hover-sidebar);
+}
+
+.ventas-carrito {
+    flex: 1;
+    min-width: 300px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.ventas-carrito h3 {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);  /* 👈 AHORA USA EL COLOR DEL BORDE */
+    color: var(--text-primary);
+}
+
+.ventas-carrito-vacio {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 40px 20px;
+}
+
+.ventas-carrito-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.ventas-carrito-item-imagen {
+    width: 50px;
+    height: 50px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.ventas-carrito-item-info {
+    flex: 1;
+}
+
+.ventas-carrito-item-nombre {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.ventas-carrito-item-precio {
+    font-size: 12px;
+    color: var(--text-primary);  /* Cambiado de accent-color a text-primary */
+}
+
+.ventas-carrito-item-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.ventas-carrito-item-cantidad button {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+}
+
+.ventas-carrito-item-cantidad span {
+    min-width: 30px;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.ventas-carrito-item-subtotal {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    min-width: 70px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+.ventas-carrito-item-eliminar {
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid #e74c3c;
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+}
+
+.ventas-carrito-item-eliminar:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+.ventas-carrito-total {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid var(--border-color);
+    text-align: right;
+    color: var(--text-primary);
+}
+
+.ventas-carrito-total .total-monto {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);  /* Cambiado de accent-color a text-primary */
+}
+
+.ventas-metodos-pago {
+    margin-top: 20px;
+}
+
+.ventas-metodos-pago select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.ventas-btn-finalizar {
+    width: 100%;
+    padding: 14px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.ventas-btn-finalizar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+    background: #219653;
+}
+
+.ventas-btn-finalizar:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+}
+
+/* 🌊 EFECTO ONDA EXPANSIVA */
+.ventas-btn-finalizar::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.ventas-btn-finalizar:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+.ventas-btn-finalizar:hover {
+    background: #219653;
+}
+
+.ventas-modal-ticket {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.ventas-modal-content {
+    background: var(--bg-modal);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: var(--text-primary);
+}
+
+.ventas-ticket {
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.ventas-ticket-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.ventas-ticket-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.ventas-ticket-total {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-color);
+    font-weight: bold;
+}
+
+.ventas-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.ventas-btn-imprimir {
+    flex: 1;
+    padding: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.ventas-btn-imprimir:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+    background: #2980b9;
+}
+
+.ventas-btn-imprimir:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.ventas-btn-imprimir::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.ventas-btn-imprimir:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+.ventas-btn-cerrar-modal {
+    flex: 1;
+    padding: 10px;
+    background: #95a5a6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.ventas-btn-cerrar-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+    background: #7f8c8d;
+}
+
+.ventas-btn-cerrar-modal:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(149, 165, 166, 0.3);
+}
+
+.ventas-btn-cerrar-modal::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.ventas-btn-cerrar-modal:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+@media (max-width: 900px) {
+    .ventas-container {
+        flex-direction: column;
+    }
+    .ventas-carrito {
+        position: static;
+        order: -1;
+    }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+    </style>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="sidebar">
+    <h2>Pastelería</h2>
+
+    <ul>
+        <li onclick="mostrarSeccion('inventario')">Inventario</li>
+        <li onclick="mostrarSeccion('ventas')">Ventas</li>
+        <li onclick="mostrarSeccion('facturas')">Facturas</li>
+        <li onclick="mostrarSeccion('clientes')">Clientes</li>
+    </ul>
+        
+    <div class="theme-switch-container">
+        <label class="theme-switch">
+            <input type="checkbox" id="themeToggle" onchange="toggleDarkMode()">
+            <span class="slider"></span>
+        </label>
+        <span class="theme-text">Modo oscuro</span>
+    </div>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <h1>Sistema de Gestión</h1>
+        <button class="logout" onclick="logout()">Cerrar Sesión</button>
+    </div>
+
+    <div class="content">
+        <div id="inventario">
+            <h2 class="seccion-titulo">Inventario de Pastelería Alemana</h2>
+
+            <div class="imagen-preview-container">
+                <img id="imagenPreview" class="imagen-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Ctext x='50' y='55' font-family='Arial' font-size='12' fill='%23999' text-anchor='middle'%3ESin imagen%3C/text%3E%3C/svg%3E" alt="Vista previa">
+            </div>
+            
+            <input type="file" id="imagenProducto" class="file-input" accept="image/*" onchange="previewImagen(this)">
+            <button class="btn-imagen" onclick="document.getElementById('imagenProducto').click()">Seleccionar imagen</button>
+
+            <div class="grid-2">
+                <div>
+                    <label>Producto</label>
+                    <input type="text" id="nombre" placeholder="Escriba el producto">
+                </div>
+                <div>
+                    <label>Categoría</label>
+                    <select id="categoria">
+                        <option value="">Seleccione categoría</option>
+                        <option>Torta</option>
+                        <option>Pastel</option>
+                        <option>Tarta</option>
+                        <option>Panadería dulce</option>
+                        <option>Galleta</option>
+                        <option>Postre frío</option>
+                        <option>Chocolate</option>
+                        <option>Dona</option>
+                        <option>Cupcake</option>
+                        <option>Producto alemán tradicional</option>
+                        <option>Surtido</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <label>Presentación</label>
+                    <select id="presentacion">
+                        <option value="">Seleccione presentación</option>
+                        <option>Por unidad</option>
+                        <option>Media docena</option>
+                        <option>Docena</option>
+                        <option>Por libra</option>
+                        <option>Por porción</option>
+                        <option>Pastel completo</option>
+                        <option>Caja surtida</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Tamaño</label>
+                    <select id="tamano">
+                        <option value="">Seleccione tamaño</option>
+                        <option>Mini</option>
+                        <option>Pequeño</option>
+                        <option>Mediano</option>
+                        <option>Grande</option>
+                        <option>Familiar</option>
+                        <option>Personalizado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <label>Relleno</label>
+                    <select id="relleno">
+                        <option value="">Seleccione relleno</option>
+                        <option>NO APLICA</option>
+                        <option>Sin relleno</option>
+                        <option>Chocolate</option>
+                        <option>Vainilla</option>
+                        <option>Fresa</option>
+                        <option>Dulce de leche</option>
+                        <option>Queso crema</option>
+                        <option>Crema pastelera</option>
+                        <option>Cereza</option>
+                        <option>Manzana</option>
+                        <option>Frutos rojos</option>
+                        <option>Nutella</option>
+                        <option>Maracuyá</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Cobertura</label>
+                    <select id="cobertura">
+                        <option value="">Seleccione cobertura</option>
+                        <option>NO APLICA</option>
+                        <option>Sin cobertura</option>
+                        <option>Chocolate</option>
+                        <option>Fondant</option>
+                        <option>Crema chantillí</option>
+                        <option>Glaseado</option>
+                        <option>Merengue</option>
+                        <option>Ganache</option>
+                        <option>Azúcar glass</option>
+                        <option>Frutas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <label>Estado</label>
+                    <select id="estado">
+                        <option value="">Seleccione estado</option>
+                        <option>Disponible</option>
+                        <option>Bajo stock</option>
+                        <option>Agotado</option>
+                    </select>
+                </div>
+                <div></div>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <label>Cantidad</label>
+                    <input type="number" id="cantidad" placeholder="Cantidad">
+                </div>
+                <div>
+                    <label>Precio</label>
+                    <input type="number" id="precio" placeholder="Precio">
+                </div>
+            </div>
+
+            <label>Observaciones del producto</label>
+            <textarea id="observaciones" placeholder="Ejemplo: con nombre en fondant, empaque especial, sin nueces, decoración dorada..."></textarea>
+
+            <button class="btn-primary" onclick="agregarProducto()">Agregar</button>
+
+            <div class="separador-decorativo">
+                <span>BUSCAR PRODUCTOS</span>
+            </div>
+
+            <input type="text" id="buscadorProducto" placeholder="Buscar producto..." onkeyup="buscarProducto()" style="margin-top:15px;">
+
+            <div class="filtros-avanzados">
+                <div class="filtros-header" onclick="toggleFiltrosAvanzados()">
+                    <h3>Búsqueda avanzada</h3>
+                    <span id="filtroToggle" style="font-size: 16px;">▶</span>
+                </div>
+                
+                <div id="filtrosAvanzados" class="filtros-panel" style="display: none;">
+                    <div class="grid-2">
+                        <div>
+                            <label>Categoría</label>
+                            <select id="filtroCategoria" onchange="aplicarFiltrosAvanzados()">
+                                <option value="">Todas</option>
+                                <option>Torta</option>
+                                <option>Pastel</option>
+                                <option>Tarta</option>
+                                <option>Panadería dulce</option>
+                                <option>Galleta</option>
+                                <option>Postre frío</option>
+                                <option>Chocolate</option>
+                                <option>Dona</option>
+                                <option>Cupcake</option>
+                                <option>Producto alemán tradicional</option>
+                                <option>Surtido</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Presentación</label>
+                            <select id="filtroPresentacion" onchange="aplicarFiltrosAvanzados()">
+                                <option value="">Todas</option>
+                                <option>Por unidad</option>
+                                <option>Media docena</option>
+                                <option>Docena</option>
+                                <option>Por libra</option>
+                                <option>Por porción</option>
+                                <option>Pastel completo</option>
+                                <option>Caja surtida</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <label>Tamaño</label>
+                            <select id="filtroTamano" onchange="aplicarFiltrosAvanzados()">
+                                <option value="">Todos</option>
+                                <option>Mini</option>
+                                <option>Pequeño</option>
+                                <option>Mediano</option>
+                                <option>Grande</option>
+                                <option>Familiar</option>
+                                <option>Personalizado</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Relleno</label>
+                            <select id="filtroRelleno" onchange="aplicarFiltrosAvanzados()">
+                                <option value="">Todos</option>
+                                <option>NO APLICA</option>
+                                <option>Sin relleno</option>
+                                <option>Chocolate</option>
+                                <option>Vainilla</option>
+                                <option>Fresa</option>
+                                <option>Dulce de leche</option>
+                                <option>Queso crema</option>
+                                <option>Crema pastelera</option>
+                                <option>Cereza</option>
+                                <option>Manzana</option>
+                                <option>Frutos rojos</option>
+                                <option>Nutella</option>
+                                <option>Maracuyá</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <label>Cobertura</label>
+                            <select id="filtroCobertura" onchange="aplicarFiltrosAvanzados()">
+                                <option value="">Todas</option>
+                                <option>NO APLICA</option>
+                                <option>Sin cobertura</option>
+                                <option>Chocolate</option>
+                                <option>Fondant</option>
+                                <option>Crema chantillí</option>
+                                <option>Glaseado</option>
+                                <option>Merengue</option>
+                                <option>Ganache</option>
+                                <option>Azúcar glass</option>
+                                <option>Frutas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Estado</label>
+                            <select id="filtroEstado" onchange="aplicarFiltrosAvanzados()">
+                                <option value="">Todos</option>
+                                <option>Disponible</option>
+                                <option>Bajo stock</option>
+                                <option>Agotado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <label>Stock mínimo</label>
+                            <input type="number" id="filtroStockMin" placeholder="Ej: 5" onkeyup="aplicarFiltrosAvanzados()">
+                        </div>
+                        <div>
+                            <label>Precio máx.</label>
+                            <input type="number" id="filtroPrecioMax" placeholder="Ej: 50" onkeyup="aplicarFiltrosAvanzados()">
+                        </div>
+                    </div>
+
+                    <div class="filtros-acciones">
+                        <button class="btn-primary" onclick="aplicarFiltrosAvanzados()">Aplicar</button>
+                        <button class="btn-warning" onclick="limpiarFiltrosAvanzados()">Limpiar</button>
+                    </div>
+
+                    <div class="resultados-info">
+                        <strong>Resultados:</strong> <span id="resultadosCount">0</span> productos
+                    </div>
+                </div>
+            </div>
+
+            <div class="separador-simple separador-decorativo">
+                <span>PRODUCTOS</span>
+            </div>
+
+            <div id="listaProductos"></div>
+        </div>
+
+        <div id="ventas" style="display:none;">
+            <div class="ventas-container">
+                <div class="ventas-catalogo">
+                    <div class="ventas-filtros">
+                        <div style="position: relative; display: flex; align-items: center; flex: 1; min-width: 200px;">
+                            <input type="text" id="ventasSearchProducto" placeholder="🔍 Buscar producto..." onkeyup="filtrarProductosVentas()" style="padding-right: 35px; width: 100%;">
+                            <span id="ventasClearSearch" onclick="limpiarBuscadorVentas()" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-secondary); font-size: 18px; display: none;">✖</span>
+                        </div>
+                        <button id="ventasToggleAvanzado" onclick="toggleFiltrosAvanzadosVentas()" style="background: var(--btn-filtros-bg); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 14px; white-space: nowrap; height: 42px; min-width: 100px;">
+                            <span id="ventasFiltroToggleText">▼ Filtros</span>
+                        </button>
+                    </div>
+
+                    <!-- PANEL DE BÚSQUEDA AVANZADA (OCULTO POR DEFECTO) -->
+                    <div id="ventasFiltrosAvanzados" style="display: none; background: var(--bg-card); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        
+                        <!-- CATEGORÍA AHORA ESTÁ AQUÍ DENTRO -->
+                        <div style="margin-bottom: 15px;">
+                            <label>Categoría</label>
+                            <select id="ventasFiltroCategoria" onchange="aplicarFiltrosAvanzadosVentas()" style="width: 100%;">
+                                <option value="">Todas las categorías</option>
+                                <option>Torta</option>
+                                <option>Pastel</option>
+                                <option>Tarta</option>
+                                <option>Galleta</option>
+                                <option>Postre frío</option>
+                                <option>Chocolate</option>
+                                <option>Dona</option>
+                                <option>Cupcake</option>
+                            </select>
+                        </div>
+
+                        <div class="grid-2">
+                            <div>
+                                <label>Presentación</label>
+                                <select id="ventasFiltroPresentacion" onchange="aplicarFiltrosAvanzadosVentas()">
+                                    <option value="">Todas</option>
+                                    <option>Por unidad</option>
+                                    <option>Media docena</option>
+                                    <option>Docena</option>
+                                    <option>Por libra</option>
+                                    <option>Por porción</option>
+                                    <option>Pastel completo</option>
+                                    <option>Caja surtida</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Tamaño</label>
+                                <select id="ventasFiltroTamano" onchange="aplicarFiltrosAvanzadosVentas()">
+                                    <option value="">Todos</option>
+                                    <option>Mini</option>
+                                    <option>Pequeño</option>
+                                    <option>Mediano</option>
+                                    <option>Grande</option>
+                                    <option>Familiar</option>
+                                    <option>Personalizado</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="grid-2">
+                            <div>
+                                <label>Relleno</label>
+                                <select id="ventasFiltroRelleno" onchange="aplicarFiltrosAvanzadosVentas()">
+                                    <option value="">Todos</option>
+                                    <option>NO APLICA</option>
+                                    <option>Sin relleno</option>
+                                    <option>Chocolate</option>
+                                    <option>Vainilla</option>
+                                    <option>Fresa</option>
+                                    <option>Dulce de leche</option>
+                                    <option>Queso crema</option>
+                                    <option>Crema pastelera</option>
+                                    <option>Cereza</option>
+                                    <option>Manzana</option>
+                                    <option>Frutos rojos</option>
+                                    <option>Nutella</option>
+                                    <option>Maracuyá</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Cobertura</label>
+                                <select id="ventasFiltroCobertura" onchange="aplicarFiltrosAvanzadosVentas()">
+                                    <option value="">Todas</option>
+                                    <option>NO APLICA</option>
+                                    <option>Sin cobertura</option>
+                                    <option>Chocolate</option>
+                                    <option>Fondant</option>
+                                    <option>Crema chantillí</option>
+                                    <option>Glaseado</option>
+                                    <option>Merengue</option>
+                                    <option>Ganache</option>
+                                    <option>Azúcar glass</option>
+                                    <option>Frutas</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="grid-2">
+                            <div>
+                                <label>Precio máximo ($)</label>
+                                <input type="number" id="ventasFiltroPrecioMax" placeholder="Ej: 50" onkeyup="aplicarFiltrosAvanzadosVentas()">
+                            </div>
+                            <div>
+                                <label>Stock mínimo</label>
+                                <input type="number" id="ventasFiltroStockMin" placeholder="Ej: 5" onkeyup="aplicarFiltrosAvanzadosVentas()">
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="btn-primary" onclick="aplicarFiltrosAvanzadosVentas()">Aplicar filtros</button>
+                            <button class="btn-warning" onclick="limpiarFiltrosAvanzadosVentas()">Limpiar filtros</button>
+                        </div>
+                        
+                        <div style="margin-top: 10px; padding: 8px; background: var(--bg-primary); border-radius: 6px; font-size: 13px;">
+                            <strong>Resultados:</strong> <span id="ventasResultadosCount">0</span> productos
+                        </div>
+                    </div>
+
+                    <div id="ventasProductosGrid" class="ventas-productos-grid"></div>
+                </div>
+
+                <div id="ventasCarritoPanel" class="ventas-carrito">
+                    <h3>🛒 Mi Pedido</h3>
+                    <div id="ventasCarritoVacio" class="ventas-carrito-vacio">
+                        <i class="fas fa-shopping-basket" style="font-size: 48px; margin-bottom: 10px;"></i>
+                        <p>Tu carrito está vacío</p>
+                        <p style="font-size: 12px;">Agrega productos para comenzar</p>
+                    </div>
+                    <div id="ventasCarritoItems" style="display: none;"></div>
+                    <div id="ventasCarritoTotal" class="ventas-carrito-total" style="display: none;"></div>
+                    <div id="ventasMetodosPago" class="ventas-metodos-pago" style="display: none;">
+                        <select id="ventasMetodoPago" onchange="this.classList.remove('campo-error')">
+                            <option value="">Seleccione método de pago</option>
+                            <option value="Yappy">📱 Yappy</option>
+                            <option value="Visa">💳 Visa</option>
+                            <option value="ACH">🏦 Transferencia ACH</option>
+                        </select>
+                        <button class="ventas-btn-finalizar" onclick="finalizarVentaVentas()">Siguiente</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ventasModalTicket" class="ventas-modal-ticket">
+                <div class="ventas-modal-content">
+                    <h3 style="margin-bottom: 15px;">🧾 Ticket de Venta</h3>
+                    <div id="ventasTicketContenido" class="ventas-ticket"></div>
+                    <div class="ventas-modal-buttons">
+                        <button class="ventas-btn-imprimir" onclick="imprimirTicketVentas()">Imprimir</button>
+                        <button class="ventas-btn-cerrar-modal" onclick="cerrarModalTicketVentas()">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL DE DATOS DEL CLIENTE -->
+            <div id="ventasModalCliente" class="modal">
+                <div class="modal-content" style="max-width: 400px; padding: 25px;" onclick="event.stopPropagation()">
+                    <h3 style="margin-bottom: 20px; text-align: center;">👤 Datos del Cliente</h3>
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: 600; margin-bottom: 5px; display: block;">Nombre:</label>
+                        <input type="text" id="clienteFacturaNombre" placeholder="Ej: Juan Castro" style="width: 100%; padding: 10px; border-radius: 6px;" onkeyup="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '')">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: 600; margin-bottom: 5px; display: block;">Teléfono:</label>
+                        <input type="tel" id="clienteFacturaTelefono" placeholder="Ej: 6472-6371" style="width: 100%; padding: 10px; border-radius: 6px;" onkeyup="this.value = this.value.replace(/[^0-9\-]/g, '')">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-success" onclick="confirmarDatosCliente()" style="flex: 2;">Finalizar Compra</button>
+                        <button class="btn-danger" onclick="cerrarModalCliente()" style="flex: 1;">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL DE DETALLE DE PRODUCTO -->
+            <div id="ventasModalProducto" class="modal" onclick="cerrarModalProductoVentas()">
+                <div class="modal-content" style="max-width: 500px; padding: 25px;" onclick="event.stopPropagation()">
+                    <h3 style="margin-bottom: 15px; text-align: center;" id="modalProductoNombre">Nombre del Producto</h3>
+                    
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <img id="modalProductoImagen" src="" style="width: 100%; max-height: 250px; object-fit: contain; border-radius: 12px;" alt="Producto">
+                    </div>
+                    
+                    <div style="display: grid; gap: 8px; margin-bottom: 15px;" id="modalProductoDetalles">
+                        <!-- Los detalles se llenan con JavaScript -->
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; align-items: center; margin-top: 15px;">
+                        <label style="margin: 0; white-space: nowrap;">Cantidad:</label>
+                        <input type="number" id="modalProductoCantidad" min="1" value="1" style="width: 80px; margin: 0;">
+                        <span id="modalProductoStock" style="margin-left: 10px; color: var(--text-secondary); font-size: 13px;"></span>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn-success" onclick="agregarDesdeModalVentas()" style="flex: 2;">Agregar al carrito</button>
+                        <button class="btn-danger" onclick="cerrarModalProductoVentas()" style="flex: 1;">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="facturas" style="display:none;">
+            <h2 class="seccion-titulo">Historial de Facturas</h2>
+            
+            <!-- BUSCADOR DE FACTURAS -->
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <input type="text" id="facturaSearch" placeholder="🔍 Buscar por #, cliente, método..." onkeyup="filtrarFacturas()" style="flex: 2; min-width: 200px;">
+                <select id="facturaFiltroFecha" onchange="filtrarFacturas()" style="flex: 1; min-width: 150px;">
+                    <option value="">Todas las fechas</option>
+                    <option value="hoy">Hoy</option>
+                    <option value="semana">Esta semana</option>
+                    <option value="mes">Este mes</option>
+                </select>
+                <button class="btn-warning" onclick="limpiarFiltrosFacturas()" style="padding: 10px 15px; height: 42px;">Limpiar</button>
+            </div>
+            
+            <!-- CONTADOR DE RESULTADOS -->
+            <div style="margin-bottom: 15px; font-size: 13px; color: var(--text-secondary);">
+                <span id="facturasCount">0</span> facturas encontradas
+            </div>
+            
+            <div id="listaFacturas"></div>
+        </div>
+
+        <div id="clientes" style="display:none;">
+            <h2 class="seccion-titulo" id="tituloCliente">Gestión de Clientes</h2>
+            <input type="text" id="clienteNombre" placeholder="Nombre del cliente">
+            <input type="text" id="clienteTelefono" placeholder="Teléfono">
+            <input type="email" id="clienteCorreo" placeholder="Correo electrónico">
+            <button class="btn-primary" id="btnAgregarCliente" onclick="agregarCliente()">Agregar Cliente</button>
+            <button class="btn-warning" id="btnActualizarCliente" onclick="actualizarCliente()" style="display:none;">Guardar Cambios</button>
+            <button class="btn-danger" id="btnCancelarCliente" onclick="cancelarEdicionCliente()" style="display:none;">Cancelar</button>
+            <div id="listaClientes"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalConfirmacionEliminar">
+    <div class="modal-confirm">
+        <div class="icono warning">⚠️</div>
+        <h3>Confirmar eliminación</h3>
+        <p id="mensajeConfirmacionEliminar">¿Está seguro de eliminar este elemento?</p>
+        <div class="botones">
+            <button class="btn-danger" onclick="ejecutarEliminacion()">Sí, eliminar</button>
+            <button class="btn-primary" onclick="cerrarModalEliminar()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalDetalle">
+    <div class="modal-content">
+        <h3>Detalle de Factura</h3>
+        <div id="detalleContenido"></div>
+        <br>
+        <button class="btn-danger" onclick="cerrarModal()">Cerrar</button>
+    </div>
+</div>
+
+<div class="modal" id="modalEditarProducto">
+    <div class="modal-content">
+        <h3>Editar Producto</h3>
+        <div class="imagen-preview-container">
+            <img id="editImagenPreview" class="imagen-preview" src="" alt="Vista previa">
+        </div>
+        <input type="file" id="editImagenProducto" class="file-input" accept="image/*" onchange="previewEditImagen(this)">
+        <button class="btn-imagen" onclick="document.getElementById('editImagenProducto').click()">📷 Cambiar imagen</button>
+        
+        <label>Nombre del producto</label>
+        <input type="text" id="editNombre" placeholder="Ej: Pastel de chocolate">
+        
+        <label>Categoría</label>
+        <select id="editCategoria">
+            <option>Torta</option>
+            <option>Pastel</option>
+            <option>Tarta</option>
+            <option>Panadería dulce</option>
+            <option>Galleta</option>
+            <option>Postre frío</option>
+            <option>Chocolate</option>
+            <option>Dona</option>
+            <option>Cupcake</option>
+            <option>Producto alemán tradicional</option>
+            <option>Surtido</option>
+        </select>
+        
+        <label>Presentación</label>
+        <select id="editPresentacion">
+            <option>Por unidad</option>
+            <option>Media docena</option>
+            <option>Docena</option>
+            <option>Por libra</option>
+            <option>Por porción</option>
+            <option>Pastel completo</option>
+            <option>Caja surtida</option>
+        </select>
+        
+        <label>Tamaño</label>
+        <select id="editTamano">
+            <option>Mini</option>
+            <option>Pequeño</option>
+            <option>Mediano</option>
+            <option>Grande</option>
+            <option>Familiar</option>
+            <option>Personalizado</option>
+        </select>
+        
+        <label>Relleno</label>
+        <select id="editRelleno">
+            <option>NO APLICA</option>
+            <option>Sin relleno</option>
+            <option>Chocolate</option>
+            <option>Vainilla</option>
+            <option>Fresa</option>
+            <option>Dulce de leche</option>
+            <option>Queso crema</option>
+            <option>Crema pastelera</option>
+            <option>Cereza</option>
+            <option>Manzana</option>
+            <option>Frutos rojos</option>
+            <option>Nutella</option>
+            <option>Maracuyá</option>
+        </select>
+        
+        <label>Cobertura</label>
+        <select id="editCobertura">
+            <option>NO APLICA</option>
+            <option>Sin cobertura</option>
+            <option>Chocolate</option>
+            <option>Fondant</option>
+            <option>Crema chantillí</option>
+            <option>Glaseado</option>
+            <option>Merengue</option>
+            <option>Ganache</option>
+            <option>Azúcar glass</option>
+            <option>Frutas</option>
+        </select>
+        
+        <label>Estado</label>
+        <select id="editEstado">
+            <option>Disponible</option>
+            <option>Bajo stock</option>
+            <option>Agotado</option>
+        </select>
+        
+        <label>Cantidad disponible</label>
+        <input type="number" id="editCantidad" placeholder="Ej: 10">
+        
+        <label>Precio</label>
+        <input type="number" id="editPrecio" placeholder="Ej: 25.99">
+        
+        <label>Observaciones</label>
+        <textarea id="editObservaciones" placeholder="Ej: Sin nueces, decoración especial..."></textarea>
+        
+        <br><br>
+        <button class="btn-success" onclick="guardarEdicionProducto()">Guardar cambios</button>
+        <button class="btn-danger" onclick="cerrarModalEditar()">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal" id="modalConfirmacion">
+    <div class="modal-confirm">z-index
+        <div class="icono warning">⚠️</div>
+        <h3>Confirmar cambios</h3>
+        <p>¿Está seguro de guardar los cambios en este producto?</p>
+        <div class="botones">
+            <button class="btn-success" onclick="confirmarGuardar()">Guardar</button>
+            <button class="btn-danger" onclick="cerrarConfirmacion()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalConfirmacionLogout">
+    <div class="modal-confirm">
+        <div class="icono warning">🚪</div>
+        <h3>Cerrar Sesión</h3>
+        <p>¿Está seguro que desea cerrar la sesión?</p>
+        <div class="botones">
+            <button class="btn-danger" onclick="confirmarLogout()">Sí, cerrar sesión</button>
+            <button class="btn-primary" onclick="cerrarModalLogout()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+<!-- 🔥 FIREBASE SDK -->
+<script type="module">
+    // Importar las funciones necesarias desde Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+        getFirestore, 
+        collection, 
+        addDoc, 
+        getDocs, 
+        updateDoc, 
+        deleteDoc, 
+        doc,
+        query,
+        where,
+        onSnapshot  // 👈 AGREGA ESTO
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    
+    // TU CONFIGURACIÓN REAL DE FIREBASE
+    const firebaseConfig = {
+        apiKey: "AIzaSyBY69Kv7fDdXlXN4NRb80E05Yma4iyBfd8",
+        authDomain: "pasteleria-alemana.firebaseapp.com",
+        projectId: "pasteleria-alemana",
+        storageBucket: "pasteleria-alemana.firebasestorage.app",
+        messagingSenderId: "1040275893942",
+        appId: "1:1040275893942:web:03fcf4eb54cd57e5b1c017"
+    };
+    
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    // Exponer globalmente para usar en otras funciones
+    window.db = db;
+    window.firebaseHelpers = { 
+        collection, 
+        addDoc, 
+        getDocs, 
+        updateDoc, 
+        deleteDoc, 
+        doc,
+        query,
+        where,
+        onSnapshot  // 👈 AGREGA ESTO
+    };
+    
+    console.log('🔥 Firebase conectado correctamente');
+</script>
+
+<script>
+    let productos = [];
+    let carrito = [];
+    let facturas = [];
+    let clientes = [];
+    let productoEditando = null;
+    let editClienteIndex = null;
+    let tipoEliminacion = null;
+    let indiceEliminacion = null;
+
+        // 🔥 CARGAR PRODUCTOS DESDE FIRESTORE (TIEMPO REAL)
+    function cargarProductosFirestore() {
+        try {
+            const { collection, onSnapshot } = window.firebaseHelpers;
+            
+            // Escuchar cambios en tiempo real
+            onSnapshot(collection(window.db, "productos"), (querySnapshot) => {
+                productos = [];
+                querySnapshot.forEach((doc) => {
+                    productos.push({ id: doc.id, ...doc.data() });
+                });
+                console.log('📦 Productos actualizados en tiempo real:', productos.length);
+                mostrarInventario();
+                cargarCatalogoVentas();
+            });
+        } catch (error) {
+            console.error('❌ Error al cargar productos:', error);
+        }
+    }
+
+        // 🔥 CARGAR FACTURAS DESDE FIRESTORE (TIEMPO REAL)
+    function cargarFacturasFirestore() {
+        try {
+            const { collection, onSnapshot } = window.firebaseHelpers;
+            
+            onSnapshot(collection(window.db, "facturas"), (querySnapshot) => {
+                facturas = [];
+                querySnapshot.forEach((doc) => {
+                    facturas.push({ id: doc.id, ...doc.data() });
+                });
+                console.log('📦 Facturas actualizadas en tiempo real:', facturas.length);
+                mostrarFacturas();
+            });
+        } catch (error) {
+            console.error('❌ Error al cargar facturas:', error);
+        }
+    }
+
+    function actualizarEstadosProductos() {
+        let cambios = false;
+        productos.forEach(p => {
+            let estadoAnterior = p.estado;
+            let nuevoEstado = p.estado;
+            
+            if (p.cantidad <= 10 && p.cantidad > 0) {
+                nuevoEstado = "Bajo stock";
+            } else if (p.cantidad === 0) {
+                nuevoEstado = "Agotado";
+            } else if (p.cantidad > 10) {
+                nuevoEstado = "Disponible";
+            }
+            
+            if (estadoAnterior !== nuevoEstado) {
+                p.estado = nuevoEstado;
+                cambios = true;
+            }
+        });
+        
+        if (cambios) {
+            guardarProductos();
+            console.log("Estados de productos actualizados");
+        }
+    }
+
+    function configurarMenuPorRol() {
+        const usuarioActivo = JSON.parse(sessionStorage.getItem("usuarioActivo"));
+        const menu = document.getElementById("menuPrincipal");
+        
+        if (!usuarioActivo || !menu) {
+            window.location.href = "index.html";
+            return;
+        }
+        
+        const rol = usuarioActivo.rol;
+        let opcionesMenu = [];
+        
+        if (rol === "gerente") {
+            opcionesMenu = [
+                { nombre: "Inventario", seccion: "inventario" },
+                { nombre: "Ventas", seccion: "ventas" },
+                { nombre: "Facturas", seccion: "facturas" },
+                { nombre: "Clientes", seccion: "clientes" }
+            ];
+        } else if (rol === "inventario") {
+            opcionesMenu = [
+                { nombre: "Inventario", seccion: "inventario" },
+                { nombre: "Facturas", seccion: "facturas" }
+            ];
+        } else if (rol === "ventas") {
+            opcionesMenu = [
+                { nombre: "Ventas", seccion: "ventas" },
+                { nombre: "Facturas", seccion: "facturas" }
+            ];
+        }
+        
+        let menuHTML = '';
+        opcionesMenu.forEach(opcion => {
+            menuHTML += `<li onclick="mostrarSeccion('${opcion.seccion}')">${opcion.nombre}</li>`;
+        });
+        
+        menu.innerHTML = menuHTML;
+        
+        if (opcionesMenu.length > 0) {
+            mostrarSeccion(opcionesMenu[0].seccion);
+        }
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode);
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) themeToggle.checked = isDarkMode;
+    }
+
+    function initDarkMode() {
+        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (savedDarkMode) {
+            document.body.classList.add('dark-mode');
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) themeToggle.checked = true;
+        }
+    }
+
+    function mostrarNotificacion(tipo, titulo, mensaje, duracion = 3000) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${tipo}`;
+        const iconos = { success: '✓', error: '✗', warning: '⚠', info: 'ℹ' };
+        toast.innerHTML = `
+            <div class="toast-icon">${iconos[tipo]}</div>
+            <div class="toast-content">
+                <div class="toast-title">${titulo}</div>
+                <div class="toast-message">${mensaje}</div>
+            </div>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('fade-out');
+            setTimeout(() => toast.remove(), 300);
+        }, duracion);
+    }
+
+    function mostrarConfirmacionEliminar(mensaje, tipo, indice) {
+    document.getElementById('mensajeConfirmacionEliminar').textContent = mensaje;
+    tipoEliminacion = tipo;
+    indiceEliminacion = indice;
+    document.getElementById('modalConfirmacionEliminar').style.display = 'flex';
+    document.body.classList.add('modal-abierto');
+    }
+
+    function cerrarModalEliminar() {
+    document.getElementById('modalConfirmacionEliminar').style.display = 'none';
+    document.body.classList.remove('modal-abierto');
+    tipoEliminacion = null;
+    indiceEliminacion = null;
+}
+
+        async function ejecutarEliminacion() {
+        if (tipoEliminacion === 'producto' && indiceEliminacion !== null) {
+            const productoId = productos[indiceEliminacion].id;
+            
+            try {
+                const { deleteDoc, doc } = window.firebaseHelpers;
+                const productoRef = doc(window.db, "productos", productoId);
+                await deleteDoc(productoRef);
+                
+                await cargarProductosFirestore();
+                mostrarNotificacion('success', 'Éxito', 'Producto eliminado correctamente');
+            } catch (error) {
+                console.error('❌ Error al eliminar producto:', error);
+                mostrarNotificacion('error', 'Error', 'No se pudo eliminar el producto');
+            }
+        } else if (tipoEliminacion === 'factura' && indiceEliminacion !== null) {
+            const facturaId = facturas[indiceEliminacion].id;
+            
+            try {
+                const { deleteDoc, doc } = window.firebaseHelpers;
+                const facturaRef = doc(window.db, "facturas", facturaId);
+                await deleteDoc(facturaRef);
+                
+                await cargarFacturasFirestore();
+                mostrarNotificacion('success', 'Éxito', 'Factura eliminada correctamente');
+            } catch (error) {
+                console.error('❌ Error al eliminar factura:', error);
+                mostrarNotificacion('error', 'Error', 'No se pudo eliminar la factura');
+            }
+        } else if (tipoEliminacion === 'cliente' && indiceEliminacion !== null) {
+            // Por ahora mantenemos clientes en localStorage
+            clientes.splice(indiceEliminacion, 1);
+            guardarClientes();
+            mostrarClientes();
+            mostrarNotificacion('success', 'Éxito', 'Cliente eliminado correctamente');
+        }
+        cerrarModalEliminar();
+    }
+
+    function previewImagen(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagenPreview').src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewEditImagen(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('editImagenPreview').src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function obtenerImagenBase64(input) {
+        return new Promise((resolve, reject) => {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    resolve(e.target.result);
+                }
+                reader.onerror = reject;
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                resolve(null);
+            }
+        });
+    }
+
+    function logout() {
+    document.getElementById('modalConfirmacionLogout').style.display = 'flex';
+    document.body.classList.add('modal-abierto');
+}
+
+function confirmarLogout() {
+    localStorage.removeItem("usuarioActivo");
+    window.location.href = "index.html";
+}
+
+function cerrarModalLogout() {
+    document.getElementById('modalConfirmacionLogout').style.display = 'none';
+    document.body.classList.remove('modal-abierto');
+}
+
+    function mostrarSeccion(sec) {
+        document.getElementById("inventario").style.display = "none";
+        document.getElementById("ventas").style.display = "none";
+        document.getElementById("facturas").style.display = "none";
+        document.getElementById("clientes").style.display = "none";
+        document.getElementById(sec).style.display = "block";
+        
+        // 🔥 RESALTAR LA PESTAÑA ACTIVA
+        document.querySelectorAll('.sidebar ul li').forEach(li => {
+            li.classList.remove('activo');
+        });
+        
+        // Buscar el li que contiene el texto de la sección y resaltarlo
+        const secciones = {
+            'inventario': 'Inventario',
+            'ventas': 'Ventas',
+            'facturas': 'Facturas',
+            'clientes': 'Clientes'
+        };
+        
+        document.querySelectorAll('.sidebar ul li').forEach(li => {
+            if (li.textContent.trim() === secciones[sec]) {
+                li.classList.add('activo');
+            }
+        });
+        
+        if (sec === "facturas") mostrarFacturas();
+        if (sec === "clientes") mostrarClientes();
+        if (sec === "ventas") cargarCatalogoVentas();
+    }
+
+    function guardarProductos() { localStorage.setItem("productos", JSON.stringify(productos)); }
+    function guardarFacturas() { localStorage.setItem("facturas", JSON.stringify(facturas)); }
+    function guardarClientes() { localStorage.setItem("clientes", JSON.stringify(clientes)); }
+
+    function autocompletarCategoria() {
+        const nombre = document.getElementById("nombre").value;
+        const categoria = document.getElementById("categoria");
+        const mapa = {
+            "Apfelstrudel": "Producto alemán tradicional",
+            "Schwarzwälder Kirschtorte": "Producto alemán tradicional",
+            "Käsekuchen": "Producto alemán tradicional",
+            "Berliner": "Producto alemán tradicional",
+            "Bienenstich": "Producto alemán tradicional",
+            "Stollen": "Producto alemán tradicional",
+            "Lebkuchen": "Producto alemán tradicional",
+            "Linzer Torte": "Producto alemán tradicional",
+            "Baumkuchen": "Producto alemán tradicional",
+            "Marmorkuchen": "Producto alemán tradicional",
+            "Butterkuchen": "Producto alemán tradicional",
+            "Donas rellenas": "Dona",
+            "Cupcakes de vainilla": "Cupcake",
+            "Cupcakes de chocolate": "Cupcake",
+            "Cheesecake de fresa": "Postre frío",
+            "Cheesecake de maracuyá": "Postre frío",
+            "Brownies": "Postre frío",
+            "Galletas de mantequilla": "Galleta",
+            "Galletas con chispas": "Galleta",
+            "Milhojas": "Tarta",
+            "Éclairs": "Panadería dulce",
+            "Tarta de manzana": "Tarta",
+            "Tarta de frutas": "Tarta",
+            "Tarta de limón": "Tarta",
+            "Pastel de chocolate": "Pastel",
+            "Pastel de vainilla": "Pastel",
+            "Pastel red velvet": "Pastel",
+            "Pastel tres leches": "Pastel",
+            "Pastel selva negra": "Pastel",
+            "Pastel de zanahoria": "Pastel",
+            "Mousse de chocolate": "Postre frío",
+            "Mousse de fresa": "Postre frío",
+            "Trufas": "Chocolate",
+            "Macarons": "Postre frío",
+            "Pan dulce": "Panadería dulce",
+            "Croissant": "Panadería dulce",
+            "Pretzel dulce": "Panadería dulce",
+            "Rollos de canela": "Panadería dulce",
+            "Panqué de frutas": "Pastel",
+            "Mini tartaletas": "Tarta",
+            "Rosquillas glaseadas": "Dona",
+            "Alfajores": "Galleta",
+            "Gelatina decorada": "Postre frío",
+            "Flan": "Postre frío",
+            "Arroz con leche": "Postre frío",
+            "Pie de queso": "Postre frío",
+            "Profiteroles": "Postre frío",
+            "Chocolates artesanales": "Chocolate",
+            "Caja surtida de dulces": "Surtido"
+        };
+        if (mapa[nombre]) categoria.value = mapa[nombre];
+    }
+
+    function toggleFiltrosAvanzados() {
+        const panel = document.getElementById('filtrosAvanzados');
+        const toggle = document.getElementById('filtroToggle');
+        if (panel.style.display === 'none') {
+            panel.style.display = 'block';
+            toggle.textContent = '▼';
+        } else {
+            panel.style.display = 'none';
+            toggle.textContent = '▶';
+        }
+    }
+
+    function aplicarFiltrosAvanzados() {
+        const lista = document.getElementById("listaProductos");
+        if (!lista) return;
+
+        const filtroNombre = document.getElementById('buscadorProducto')?.value.toLowerCase() || '';
+        const filtroCategoria = document.getElementById('filtroCategoria')?.value || '';
+        const filtroPresentacion = document.getElementById('filtroPresentacion')?.value || '';
+        const filtroTamano = document.getElementById('filtroTamano')?.value || '';
+        const filtroRelleno = document.getElementById('filtroRelleno')?.value || '';
+        const filtroCobertura = document.getElementById('filtroCobertura')?.value || '';
+        const filtroEstado = document.getElementById('filtroEstado')?.value || '';
+        const filtroStockMin = document.getElementById('filtroStockMin')?.value;
+        const filtroPrecioMax = document.getElementById('filtroPrecioMax')?.value;
+
+        const productosFiltrados = productos.filter(p => {
+            if (filtroNombre && !p.nombre.toLowerCase().includes(filtroNombre)) return false;
+            if (filtroCategoria && p.categoria !== filtroCategoria) return false;
+            if (filtroPresentacion && p.presentacion !== filtroPresentacion) return false;
+            if (filtroTamano && p.tamano !== filtroTamano) return false;
+            if (filtroRelleno && p.relleno !== filtroRelleno) return false;
+            if (filtroCobertura && p.cobertura !== filtroCobertura) return false;
+            if (filtroEstado && p.estado !== filtroEstado) return false;
+            if (filtroStockMin && filtroStockMin.toString().trim() !== '') {
+                const stockMin = Number(filtroStockMin);
+                if (!isNaN(stockMin) && p.cantidad < stockMin) return false;
+            }
+            if (filtroPrecioMax && filtroPrecioMax.toString().trim() !== '') {
+                const precioMax = Number(filtroPrecioMax);
+                if (!isNaN(precioMax) && p.precio > precioMax) return false;
+            }
+            return true;
+        });
+
+        const resultadosCount = document.getElementById('resultadosCount');
+        if (resultadosCount) resultadosCount.textContent = productosFiltrados.length;
+        mostrarProductosFiltrados(productosFiltrados);
+    }
+
+    function limpiarFiltrosAvanzados() {
+        document.getElementById('buscadorProducto').value = '';
+        document.getElementById('filtroCategoria').value = '';
+        document.getElementById('filtroPresentacion').value = '';
+        document.getElementById('filtroTamano').value = '';
+        document.getElementById('filtroRelleno').value = '';
+        document.getElementById('filtroCobertura').value = '';
+        document.getElementById('filtroEstado').value = '';
+        document.getElementById('filtroStockMin').value = '';
+        document.getElementById('filtroPrecioMax').value = '';
+        aplicarFiltrosAvanzados();
+    }
+
+    function mostrarProductosFiltrados(productosFiltrados) {
+        const lista = document.getElementById("listaProductos");
+        lista.innerHTML = "";
+
+        if (productosFiltrados.length === 0) {
+            lista.innerHTML = `<div class="lista-card"><div class="lista-info"><span>No hay productos que coincidan con los filtros.</span></div></div>`;
+            return;
+        }
+
+        productosFiltrados.forEach(p => {
+            const indiceOriginal = productos.indexOf(p);
+            const alertaStock = p.cantidad <= 10 ? '<span style="color:red;font-weight:bold;">&nbsp;&nbsp; ⚠ Bajo stock</span>' : '';
+            const borde = p.cantidad <= 10 ? 'border-left:6px solid red;' : '';
+            const imagenSrc = p.imagen || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Ctext x=\'50\' y=\'55\' font-family=\'Arial\' font-size=\'12\' fill=\'%23999\' text-anchor=\'middle\'%3ESin imagen%3C/text%3E%3C/svg%3E';
+
+            lista.innerHTML += `
+            <div class="lista-card" style="${borde}">
+                <div class="producto-header">
+                    <img src="${imagenSrc}" class="producto-imagen" alt="${p.nombre}">
+                    <div class="lista-info">
+                        <span><b>Producto:</b> ${p.nombre}</span>
+                        <span><b>Categoría:</b> ${p.categoria}</span>
+                        <span><b>Presentación:</b> ${p.presentacion}</span>
+                        <span><b>Tamaño:</b> ${p.tamano}</span>
+                        <span><b>Relleno:</b> ${p.relleno}</span>
+                        <span><b>Cobertura:</b> ${p.cobertura}</span>
+                        <span><b>Estado:</b> ${p.estado}</span>
+                        <span><b>Cantidad:</b> ${p.cantidad} ${alertaStock}</span>
+                        <span><b>Precio:</b> $${p.precio}</span>
+                        <span><b>Observaciones:</b> ${p.observaciones || "Sin observaciones"}</span>
+                    </div>
+                </div>
+                <div class="lista-botones">
+                    <button class="btn-warning" onclick="editarProducto(${indiceOriginal})">Editar</button>
+                    <button class="btn-danger" onclick="mostrarConfirmacionEliminar('¿Está seguro de eliminar el producto ${p.nombre}?', 'producto', ${indiceOriginal})">Eliminar</button>
+                </div>
+            </div>`;
+        });
+    }
+
+    function mostrarInventario() { aplicarFiltrosAvanzados(); }
+    function buscarProducto() { aplicarFiltrosAvanzados(); }
+
+    async function agregarProducto() {
+    const nombreInput = document.getElementById("nombre");
+    const categoriaInput = document.getElementById("categoria");
+    const presentacionInput = document.getElementById("presentacion");
+    const tamanoInput = document.getElementById("tamano");
+    const rellenoInput = document.getElementById("relleno");
+    const coberturaInput = document.getElementById("cobertura");
+    const estadoInput = document.getElementById("estado");
+    const cantidadInput = document.getElementById("cantidad");
+    const precioInput = document.getElementById("precio");
+    const imagenInput = document.getElementById("imagenProducto");
+
+    const nombre = nombreInput.value.trim();
+    const categoria = categoriaInput.value.trim();
+    const presentacion = presentacionInput.value.trim();
+    const tamano = tamanoInput.value.trim();
+    const relleno = rellenoInput.value.trim();
+    const cobertura = coberturaInput.value.trim();
+    const estado = estadoInput.value.trim();
+    const cantidad = parseInt(cantidadInput.value);
+    const precio = parseFloat(precioInput.value);
+    const observaciones = document.getElementById("observaciones").value.trim();
+
+    document.querySelectorAll('.campo-error').forEach(el => el.classList.remove('campo-error'));
+
+    let hayError = false;
+    const camposFaltantes = [];
+
+    if (!nombre) { nombreInput.classList.add('campo-error'); camposFaltantes.push('Producto'); hayError = true; }
+    if (!categoria) { categoriaInput.classList.add('campo-error'); camposFaltantes.push('Categoría'); hayError = true; }
+    if (!presentacion) { presentacionInput.classList.add('campo-error'); camposFaltantes.push('Presentación'); hayError = true; }
+    if (!tamano) { tamanoInput.classList.add('campo-error'); camposFaltantes.push('Tamaño'); hayError = true; }
+    if (!relleno) { rellenoInput.classList.add('campo-error'); camposFaltantes.push('Relleno'); hayError = true; }
+    if (!cobertura) { coberturaInput.classList.add('campo-error'); camposFaltantes.push('Cobertura'); hayError = true; }
+    if (!estado) { estadoInput.classList.add('campo-error'); camposFaltantes.push('Estado'); hayError = true; }
+    if (isNaN(cantidad) || cantidad <= 0) { cantidadInput.classList.add('campo-error'); camposFaltantes.push('Cantidad (debe ser mayor a 0)'); hayError = true; }
+    if (isNaN(precio) || precio <= 0) { precioInput.classList.add('campo-error'); camposFaltantes.push('Precio (debe ser mayor a 0)'); hayError = true; }
+
+    if (hayError) {
+        mostrarNotificacion('error', 'Error', 'Campos incompletos', 4000);
+        return;
+    }
+
+    let estadoCalculado = estado;
+    if (cantidad <= 10 && cantidad > 0) {
+        estadoCalculado = "Bajo stock";
+    } else if (cantidad === 0) {
+        estadoCalculado = "Agotado";
+    } else if (cantidad > 10) {
+        estadoCalculado = "Disponible";
+    }
+
+    let imagenBase64 = null;
+    if (imagenInput.files && imagenInput.files[0]) {
+        imagenBase64 = await obtenerImagenBase64(imagenInput);
+    }
+
+        const nuevoProducto = {
+        nombre, categoria, presentacion, tamano, relleno, cobertura,
+        estado: estadoCalculado,
+        cantidad, precio, observaciones,
+        imagen: imagenBase64 || ''
+    };
+
+    try {
+        const { addDoc, collection } = window.firebaseHelpers;
+        await addDoc(collection(window.db, "productos"), nuevoProducto);
+        
+        // Recargar productos desde Firestore
+        await cargarProductosFirestore();
+        
+        mostrarNotificacion('success', 'Éxito', 'Producto agregado correctamente');
+    } catch (error) {
+        console.error('❌ Error al guardar producto:', error);
+        mostrarNotificacion('error', 'Error', 'No se pudo guardar el producto');
+    }
+
+    document.getElementById("nombre").value = "";
+    document.getElementById("categoria").value = "";
+    document.getElementById("presentacion").value = "";
+    document.getElementById("tamano").value = "";
+    document.getElementById("relleno").value = "";
+    document.getElementById("cobertura").value = "";
+    document.getElementById("estado").value = "";
+    document.getElementById("cantidad").value = "";
+    document.getElementById("precio").value = "";
+    document.getElementById("observaciones").value = "";
+    document.getElementById("imagenProducto").value = "";
+    document.getElementById("imagenPreview").src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Ctext x='50' y='55' font-family='Arial' font-size='12' fill='%23999' text-anchor='middle'%3ESin imagen%3C/text%3E%3C/svg%3E";
+    
+    document.querySelectorAll('.campo-error').forEach(el => el.classList.remove('campo-error'));
+}
+
+    function setupInputEvents() {
+        const inputs = document.querySelectorAll('#inventario input, #inventario select, #inventario textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() { this.classList.remove('campo-error'); });
+            input.addEventListener('change', function() { this.classList.remove('campo-error'); });
+        });
+    }
+
+    function editarProducto(i) {
+    productoEditando = i;
+    const p = productos[i];
+
+    document.getElementById("editNombre").value = p.nombre;
+    document.getElementById("editCategoria").value = p.categoria;
+    document.getElementById("editPresentacion").value = p.presentacion;
+    document.getElementById("editTamano").value = p.tamano;
+    document.getElementById("editRelleno").value = p.relleno;
+    document.getElementById("editCobertura").value = p.cobertura;
+    document.getElementById("editEstado").value = p.estado;
+    document.getElementById("editCantidad").value = p.cantidad;
+    document.getElementById("editPrecio").value = p.precio;
+    document.getElementById("editObservaciones").value = p.observaciones;
+    
+    const imagenPreview = document.getElementById("editImagenPreview");
+    imagenPreview.src = p.imagen || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Ctext x='50' y='55' font-family='Arial' font-size='12' fill='%23999' text-anchor='middle'%3ESin imagen%3C/text%3E%3C/svg%3E";
+
+    const cantidadInput = document.getElementById("editCantidad");
+    if (p.cantidad <= 10) {
+        cantidadInput.classList.add('bajo-stock');
+    } else {
+        cantidadInput.classList.remove('bajo-stock');
+    }
+
+    document.getElementById("modalEditarProducto").style.display = "flex";
+    document.body.classList.add('modal-abierto');
+}
+
+    function guardarEdicionProducto() {
+        if (productoEditando === null) return;
+        document.getElementById("modalConfirmacion").style.display = "flex";
+    }
+
+    async function confirmarGuardar() {
+    const cantidad = parseInt(document.getElementById("editCantidad").value);
+    const precio = parseFloat(document.getElementById("editPrecio").value);
+    
+    if (cantidad <= 0 || precio <= 0 || isNaN(cantidad) || isNaN(precio)) {
+        mostrarNotificacion('error', 'Error', 'La cantidad y el precio deben ser valores positivos');
+        return;
+    }
+
+    let estadoCalculado;
+    if (cantidad <= 10 && cantidad > 0) {
+    estadoCalculado = "Bajo stock";
+    } else if (cantidad === 0) {
+        estadoCalculado = "Agotado";
+    } else if (cantidad > 10) {
+        estadoCalculado = "Disponible";
+    }
+
+    const imagenInput = document.getElementById("editImagenProducto");
+    let imagenBase64 = productos[productoEditando].imagen;
+    if (imagenInput.files && imagenInput.files[0]) {
+        imagenBase64 = await obtenerImagenBase64(imagenInput);
+    }
+
+    // 🔥 Obtener el ID del documento en Firestore
+    const productoId = productos[productoEditando].id;
+    
+    // 🔥 Crear objeto con los datos actualizados
+    const productoActualizado = {
+        nombre: document.getElementById("editNombre").value,
+        categoria: document.getElementById("editCategoria").value,
+        presentacion: document.getElementById("editPresentacion").value,
+        tamano: document.getElementById("editTamano").value,
+        relleno: document.getElementById("editRelleno").value,
+        cobertura: document.getElementById("editCobertura").value,
+        estado: estadoCalculado,
+        cantidad: cantidad,
+        precio: precio,
+        observaciones: document.getElementById("editObservaciones").value,
+        imagen: imagenBase64 || ''
+    };
+
+    try {
+        const { updateDoc, doc } = window.firebaseHelpers;
+        const productoRef = doc(window.db, "productos", productoId);
+        await updateDoc(productoRef, productoActualizado);
+        
+        // Recargar productos desde Firestore
+        await cargarProductosFirestore();
+        
+        cerrarConfirmacion();
+        cerrarModalEditar();
+        productoEditando = null;
+        document.getElementById("editImagenProducto").value = "";
+        mostrarNotificacion('success', 'Éxito', 'Producto actualizado correctamente');
+    } catch (error) {
+        console.error('❌ Error al actualizar producto:', error);
+        mostrarNotificacion('error', 'Error', 'No se pudo actualizar el producto');
+    }
+}
+
+    function cerrarModalEditar() { 
+        document.getElementById("modalEditarProducto").style.display = "none";
+        document.body.classList.remove('modal-abierto');
+    }
+
+    function cerrarConfirmacion() { document.getElementById("modalConfirmacion").style.display = "none"; }
+
+    function agregarAlCarrito() {
+        const nombre = document.getElementById("ventaNombre").value.trim();
+        const cantidad = parseInt(document.getElementById("ventaCantidad").value);
+        const producto = productos.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
+        if (!producto) { mostrarNotificacion('error', 'Error', 'Producto no existe'); return; }
+        if (cantidad <= 0 || cantidad > producto.cantidad || isNaN(cantidad)) {
+            mostrarNotificacion('error', 'Error', 'Cantidad inválida o stock insuficiente');
+            return;
+        }
+        carrito.push({ nombre: producto.nombre, cantidad, precio: producto.precio, subtotal: cantidad * producto.precio, imagen: producto.imagen });
+        mostrarCarrito();
+        mostrarNotificacion('success', 'Éxito', 'Producto agregado al carrito');
+        document.getElementById("ventaNombre").value = "";
+        document.getElementById("ventaCantidad").value = "";
+    }
+
+    function mostrarCarrito() {
+        const lista = document.getElementById("listaCarrito");
+        if (!lista) return;
+        lista.innerHTML = "";
+        let total = 0;
+        if (carrito.length === 0) {
+            lista.innerHTML = `<div class="lista-card"><div class="lista-info"><span>No hay productos en el carrito.</span></div></div>`;
+            document.getElementById("totalVenta").textContent = 0;
+            return;
+        }
+        carrito.forEach((item, i) => {
+            total += item.subtotal;
+            const imagenSrc = item.imagen || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Ctext x=\'50\' y=\'55\' font-family=\'Arial\' font-size=\'12\' fill=\'%23999\' text-anchor=\'middle\'%3ESin imagen%3C/text%3E%3C/svg%3E';
+            lista.innerHTML += `
+            <div class="lista-card">
+                <div class="producto-header">
+                    <img src="${imagenSrc}" class="producto-imagen" alt="${item.nombre}">
+                    <div class="lista-info">
+                        <span><b>Producto:</b> ${item.nombre}</span>
+                        <span><b>Cantidad:</b> ${item.cantidad}</span>
+                        <span><b>Precio:</b> $${item.precio}</span>
+                        <span><b>Subtotal:</b> $${item.subtotal}</span>
+                    </div>
+                </div>
+                <div class="lista-botones">
+                    <button class="btn-danger" onclick="eliminarDelCarrito(${i})">Eliminar</button>
+                </div>
+            </div>`;
+        });
+        document.getElementById("totalVenta").textContent = total;
+    }
+
+    function eliminarDelCarrito(i) {
+        carrito.splice(i, 1);
+        mostrarCarrito();
+        mostrarNotificacion('info', 'Carrito', 'Producto eliminado del carrito');
+    }
+
+    function finalizarVenta() {
+        const metodo = document.getElementById("metodoPago").value;
+        if (carrito.length === 0) { mostrarNotificacion('error', 'Error', 'Agregue productos al carrito'); return; }
+        if (metodo === "") { mostrarNotificacion('error', 'Error', 'Seleccione un método de pago'); return; }
+        for (let item of carrito) {
+            const producto = productos.find(p => p.nombre === item.nombre);
+            if (!producto || producto.cantidad < item.cantidad) {
+                mostrarNotificacion('error', 'Error', `Stock insuficiente para ${item.nombre}`);
+                return;
+            }
+        }
+        carrito.forEach(item => { productos.find(p => p.nombre === item.nombre).cantidad -= item.cantidad; });
+        facturas.push({ numero: facturas.length + 1, fecha: new Date().toLocaleString(), metodo, total: document.getElementById("totalVenta").textContent, items: [...carrito] });
+        guardarFacturas();
+        guardarProductos();
+        carrito = [];
+        mostrarCarrito();
+        mostrarInventario();
+        document.getElementById("metodoPago").value = "";
+        mostrarNotificacion('success', 'Venta realizada', 'La venta se completó exitosamente');
+    }
+
+    function mostrarFacturas() {
+        filtrarFacturas();
+    }
+
+    function filtrarFacturas() {
+        const lista = document.getElementById("listaFacturas");
+        if (!lista) return;
+        
+        const searchTerm = document.getElementById('facturaSearch')?.value.toLowerCase() || '';
+        const filtroFecha = document.getElementById('facturaFiltroFecha')?.value || '';
+        
+        let facturasFiltradas = facturas.slice().reverse();
+        
+    if (filtroFecha) {
+        const hoy = new Date();
+        const hoyStr = hoy.toLocaleDateString();
+        
+        facturasFiltradas = facturasFiltradas.filter(f => {
+            // Extraer solo la parte de la fecha del string
+            const fechaStr = f.fecha.split(',')[0]; // "04/14/2026"
+            
+            if (filtroFecha === 'hoy') {
+                return fechaStr === hoyStr;
+            }
+            
+            if (filtroFecha === 'semana') {
+                const fechaFactura = new Date(f.fecha);
+                const inicioSemana = new Date(hoy);
+                inicioSemana.setDate(hoy.getDate() - hoy.getDay());
+                inicioSemana.setHours(0, 0, 0, 0);
+                fechaFactura.setHours(0, 0, 0, 0);
+                return fechaFactura >= inicioSemana && fechaFactura <= hoy;
+            }
+            
+            if (filtroFecha === 'mes') {
+                const fechaFactura = new Date(f.fecha);
+                return fechaFactura.getMonth() === hoy.getMonth() && 
+                        fechaFactura.getFullYear() === hoy.getFullYear();
+            }
+            
+            return true;
+        });
+    }
+        
+        if (searchTerm) {
+        facturasFiltradas = facturasFiltradas.filter(f => {
+            const numeroStr = String(f.numero);
+            const clienteStr = (f.cliente || '').toLowerCase();
+            const metodoStr = (f.metodo || '').toLowerCase();
+            return numeroStr.startsWith(searchTerm) ||
+                    clienteStr.startsWith(searchTerm) ||
+                    metodoStr.startsWith(searchTerm);
+        });
+        }
+        
+        const countSpan = document.getElementById('facturasCount');
+        if (countSpan) countSpan.textContent = facturasFiltradas.length;
+        
+        lista.innerHTML = "";
+        
+        if (facturasFiltradas.length === 0) {
+            lista.innerHTML = '<div class="lista-card"><div class="lista-info"><span>No hay facturas que coincidan con la busqueda.</span></div></div>';
+            return;
+        }
+        
+        facturasFiltradas.forEach(f => {
+            const indiceOriginal = facturas.indexOf(f);
+            const numeroFactura = f.numero.toString().padStart(6, '0');
+            const clienteMostrar = f.cliente || 'Cliente General';
+            const metodoMostrar = f.metodo || 'No especificado';
+            
+            const cardHTML = '<div class="lista-card">' +
+                '<div class="lista-info">' +
+                '<span><b>N° Factura:</b> ' + numeroFactura + '</span>' +
+                '<span><b>Fecha:</b> ' + f.fecha + '</span>' +
+                '<span><b>Cliente:</b> ' + clienteMostrar + '</span>' +
+                '<span><b>Método:</b> ' + metodoMostrar + '</span>' +
+                '<span><b>Total:</b> <strong style="color: var(--success-color);">$' + f.total + '</strong></span>' +
+                '</div>' +
+                '<div class="lista-botones">' +
+                '<button class="btn-primary" onclick="verDetalle(' + indiceOriginal + ')">Ver</button>' +
+                '<button class="btn-pdf" onclick="generarPDF(' + indiceOriginal + ')">Descargar</button>' +
+                '<button class="btn-danger" onclick="mostrarConfirmacionEliminar(\'¿Estás seguro de eliminar la factura #' + f.numero + '?\', \'factura\', ' + indiceOriginal + ')">Eliminar</button>' +
+                '</div></div>';
+            lista.innerHTML += cardHTML;
+        });
+    }
+
+    function limpiarFiltrosFacturas() {
+        document.getElementById('facturaSearch').value = '';
+        document.getElementById('facturaFiltroFecha').value = '';
+        filtrarFacturas();
+    }
+
+    function verDetalle(i) {
+        const factura = facturas[i];
+        
+        let html = '<div style="background: var(--bg-primary); padding: 15px; border-radius: 8px; margin-bottom: 15px;">' +
+            '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">' +
+            '<div>' +
+            '<p><strong>🧾 Factura #:</strong> ' + factura.numero.toString().padStart(6, '0') + '</p>' +
+            '<p><strong>📅 Fecha:</strong> ' + factura.fecha + '</p>' +
+            '</div>' +
+            '<div>' +
+            '<p><strong>💳 Método:</strong> ' + (factura.metodo || 'No especificado') + '</p>' +
+            '<p><strong>💰 Total:</strong> <span style="color: var(--success-color); font-weight: 700;">$' + factura.total + '</span></p>' +
+            '</div>' +
+            '</div>' +
+            '<div style="border-top: 1px dashed var(--border-color); margin: 10px 0; padding-top: 10px;">' +
+            '<p><strong>👤 Cliente:</strong> ' + (factura.cliente || 'Cliente General') + '</p>' +
+            '<p><strong>📞 Teléfono:</strong> ' + (factura.telefono || 'No registrado') + '</p>' +
+            '</div>' +
+            '</div>' +
+            '<h4 style="margin-bottom: 10px;">📦 Productos:</h4>';
+        
+        factura.items.forEach(item => {
+            const imagenSrc = item.imagen || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Ctext x=\'50\' y=\'55\' font-family=\'Arial\' font-size=\'12\' fill=\'%23999\' text-anchor=\'middle\'%3E🍰%3C/text%3E%3C/svg%3E';
+            html += '<div class="lista-card" style="margin-top:10px;">' +
+                '<div class="producto-header">' +
+                '<img src="' + imagenSrc + '" class="producto-imagen" alt="' + item.nombre + '">' +
+                '<div class="lista-info">' +
+                '<span><b>Producto:</b> ' + item.nombre + '</span>' +
+                '<span><b>Cantidad:</b> ' + item.cantidad + '</span>' +
+                '<span><b>Precio unitario:</b> $' + Number(item.precio).toFixed(2) + '</span>' +
+                '<span><b>Subtotal:</b> $' + Number(item.subtotal).toFixed(2) + '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+        });
+        
+        html += '<p style="margin-top:15px; text-align: right; font-size: 18px;"><strong>Total pagado: <span style="color: var(--success-color);">$' + factura.total + '</span></strong></p>';
+        document.getElementById("detalleContenido").innerHTML = html;
+        document.getElementById("modalDetalle").style.display = "flex";
+        document.body.classList.add('modal-abierto');
+    }
+
+    function verDetalle(i) {
+        const factura = facturas[i];
+        
+        let html = `
+            <div style="background: var(--bg-primary); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <p><strong>🧾 Factura #:</strong> ${factura.numero.toString().padStart(6, '0')}</p>
+                        <p><strong>📅 Fecha:</strong> ${factura.fecha}</p>
+                    </div>
+                    <div>
+                        <p><strong>💳 Método:</strong> ${factura.metodo || 'No especificado'}</p>
+                        <p><strong>💰 Total:</strong> <span style="color: var(--success-color); font-weight: 700;">$${factura.total}</span></p>
+                    </div>
+                </div>
+                <div style="border-top: 1px dashed var(--border-color); margin: 10px 0; padding-top: 10px;">
+                    <p><strong>👤 Cliente:</strong> ${factura.cliente || 'Cliente General'}</p>
+                    <p><strong>📞 Teléfono:</strong> ${factura.telefono || 'No registrado'}</p>
+                </div>
+            </div>
+            <h4 style="margin-bottom: 10px;">📦 Productos:</h4>
+        `;
+        
+        factura.items.forEach(item => {
+            const imagenSrc = item.imagen || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Ctext x=\'50\' y=\'55\' font-family=\'Arial\' font-size=\'12\' fill=\'%23999\' text-anchor=\'middle\'%3E🍰%3C/text%3E%3C/svg%3E';
+            html += `
+            <div class="lista-card" style="margin-top:10px;">
+                <div class="producto-header">
+                    <img src="${imagenSrc}" class="producto-imagen" alt="${item.nombre}">
+                    <div class="lista-info">
+                        <span><b>Producto:</b> ${item.nombre}</span>
+                        <span><b>Cantidad:</b> ${item.cantidad}</span>
+                        <span><b>Precio unitario:</b> $${Number(item.precio).toFixed(2)}</span>
+                        <span><b>Subtotal:</b> $${Number(item.subtotal).toFixed(2)}</span>
+                    </div>
+                </div>
+            </div>`;
+        });
+        
+        html += `<p style="margin-top:15px; text-align: right; font-size: 18px;"><strong>Total pagado: <span style="color: var(--success-color);">$${factura.total}</span></strong></p>`;
+        document.getElementById("detalleContenido").innerHTML = html;
+        document.getElementById("modalDetalle").style.display = "flex";
+        document.body.classList.add('modal-abierto');
+    }
+
+    function generarPDF(index) {
+    const factura = facturas[index];
+
+    console.log('📄 Generando PDF para factura:', factura.numero);
+    console.log('   Cliente:', factura.cliente);
+    console.log('   Teléfono:', factura.telefono);
+    
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const colorPrimario = '#6b3f2e';
+    const colorSecundario = '#8b5a3c';
+    const colorAcento = '#d4a373';
+    const colorTexto = '#333333';
+    const colorGris = '#666666';
+    
+    doc.setFillColor(colorPrimario);
+    doc.circle(35, 25, 12, 'F');
+
+    doc.setFillColor(colorSecundario);
+    doc.circle(35, 25, 8, 'F');
+
+    doc.setFontSize(24);
+    doc.setTextColor(colorPrimario);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Pastelería Alemana', 55, 25);
+    
+    doc.setDrawColor(colorAcento);
+    doc.setLineWidth(0.5);
+    doc.rect(15, 40, 180, 10);
+    doc.setFillColor(colorAcento);
+    doc.rect(15, 40, 180, 10, 'F');
+    doc.setFontSize(12);
+    doc.setTextColor('#ffffff');
+    doc.setFont('helvetica', 'bold');
+    doc.text('FACTURA DE VENTA', 105, 47, { align: 'center' });
+    
+    doc.setFontSize(10);
+    doc.setTextColor(colorTexto);
+    doc.setFont('helvetica', 'bold');
+    doc.text('N° FACTURA:', 20, 60);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(colorPrimario);
+    doc.text(`${factura.numero.toString().padStart(6, '0')}`, 60, 60);
+    
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(colorTexto);
+    doc.text('FECHA:', 20, 67);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${factura.fecha}`, 60, 67);
+    
+    doc.setFont('helvetica', 'bold');
+    doc.text('MÉTODO DE PAGO:', 20, 74);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${factura.metodo}`, 60, 74);
+    
+    doc.setDrawColor(colorPrimario);
+    doc.setLineWidth(0.5);
+    doc.rect(20, 85, 120, 25);
+    doc.setFillColor(colorAcento);
+    doc.rect(20, 85, 120, 6, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor('#ffffff');
+    doc.setFont('helvetica', 'bold');
+    doc.text('INFORMACIÓN DEL CLIENTE', 80, 90, { align: 'center' });
+    doc.setTextColor(colorTexto);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Cliente:', 25, 100);
+    doc.setFont('helvetica', 'normal');
+    doc.text(factura.cliente || 'Cliente General', 50, 100);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Teléfono:', 25, 107);
+    doc.setFont('helvetica', 'normal');
+    doc.text(factura.telefono || 'No registrado', 50, 107);
+    
+    const tableColumn = [
+        { header: 'Producto', dataKey: 'producto' },
+        { header: 'Cantidad', dataKey: 'cantidad' },
+        { header: 'Precio unitario', dataKey: 'precio' },
+        { header: 'Subtotal', dataKey: 'subtotal' }
+    ];
+    
+    const tableRows = factura.items.map(item => ({
+        producto: item.nombre,
+        cantidad: item.cantidad.toString(),
+        precio: `$${item.precio.toFixed(2)}`,
+        subtotal: `$${item.subtotal.toFixed(2)}`
+    }));
+    
+    doc.autoTable({
+        columns: tableColumn,
+        body: tableRows,
+        startY: 120,
+        theme: 'striped',
+        headStyles: {
+            fillColor: [107, 63, 46],
+            textColor: [255, 255, 255],
+            fontStyle: 'bold',
+            halign: 'center',
+            lineWidth: 0.5,
+            lineColor: [139, 90, 60]
+        },
+        columnStyles: {
+            producto: { cellWidth: 80, halign: 'left' },
+            cantidad: { cellWidth: 25, halign: 'center' },
+            precio: { cellWidth: 35, halign: 'right' },
+            subtotal: { cellWidth: 35, halign: 'right' }
+        },
+        styles: {
+            fontSize: 9,
+            cellPadding: 4,
+            lineColor: [200, 200, 200],
+            lineWidth: 0.1
+        },
+        alternateRowStyles: {
+            fillColor: [245, 245, 245]
+        },
+        margin: { left: 20, right: 20 }
+    });
+    
+    const finalY = doc.lastAutoTable.finalY + 10;
+    doc.setDrawColor(colorPrimario);
+    doc.setLineWidth(0.5);
+    doc.line(120, finalY, 190, finalY);
+    
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(colorPrimario);
+    doc.text('TOTAL:', 130, finalY + 10);
+    doc.setFontSize(16);
+    doc.setTextColor(colorSecundario);
+    doc.text(`$${factura.total}`, 180, finalY + 10, { align: 'right' });
+    
+    const qrCanvas = document.createElement('canvas');
+    
+    const qrData = {
+        factura: factura.numero,
+        fecha: factura.fecha,
+        total: factura.total,
+        metodo: factura.metodo,
+        empresa: 'Pastelería Alemana',
+        nit: '901.234.567-8'
+    };
+    
+    const qrString = JSON.stringify(qrData, null, 2);
+    
+    QRCode.toCanvas(qrCanvas, qrString, { width: 100, margin: 1 })
+        .then(() => {
+            const qrImage = qrCanvas.toDataURL('image/png');
+            doc.addImage(qrImage, 'PNG', 150, finalY + 30, 40, 40);
+            
+            doc.setFontSize(7);
+            doc.setTextColor(colorGris);
+            doc.text('Escanee para ver detalles de factura', 170, finalY + 75, { align: 'center' });
+            
+            doc.setFontSize(10);
+            doc.setTextColor(colorGris);
+            doc.setFont('helvetica', 'italic');
+            doc.text('Gracias por preferir la calidad y tradición alemana.', 105, finalY + 105, { align: 'center' });
+            doc.text('No se aceptan devoluciones por tratarse de productos perecederos.', 105, finalY + 110, { align: 'center' });
+            
+            doc.setDrawColor(colorAcento);
+            doc.setLineWidth(0.5);
+            doc.line(20, 270, 190, 270);
+            
+            doc.setFontSize(7);
+            doc.setTextColor(colorGris);
+            doc.text('Pastelería Alemana - RUC: 8-123-456', 105, 278, { align: 'center' });
+            doc.text('Tel: +507 6028-0997', 105, 283, { align: 'center' });
+            doc.text('Email: juan.pimentel2721@itse.ac.pa ', 105, 288, { align: 'center' });
+            
+        const codigoBarrasY = 280;
+
+        doc.setDrawColor(0, 0, 0);
+        doc.setLineWidth(0.3);
+
+        let x = 25;
+        const patron = [1,1,2,1,1,2,1,1,1,2,1,2,1,1,2,1,1,2,1,1,2,1];
+
+        for (let i = 0; i < patron.length; i++) {
+            const width = patron[i] * 0.8;
+            doc.setFillColor(0, 0, 0);
+            doc.rect(x, codigoBarrasY, width, 8, 'F');
+            x += width + 0.8;
+        }
+
+        doc.setFontSize(7);
+        doc.setTextColor(colorPrimario);
+        doc.setFont('helvetica', 'bold');
+        const numeroFactura = `FAC-${factura.numero.toString().padStart(6, '0')}`;
+        doc.text(numeroFactura, 38, codigoBarrasY +11, { align: 'left' });
+
+        doc.setDrawColor(colorAcento);
+        doc.setLineWidth(0.3);
+        doc.line(20, 295, 190, 295);
+
+        doc.setFontSize(6);
+        doc.setTextColor(colorGris);
+        doc.text('Pastelería Alemana - NIT: 901.234.567-8', 105, 300, { align: 'center' });
+        doc.text('Calle 123 #45-67, Bogotá - Tel: +57 (1) 234 5678', 105, 304, { align: 'center' });
+            
+            doc.save(`Factura_${factura.numero.toString().padStart(6, '0')}.pdf`);
+        })
+        .catch(error => {
+            console.error('Error generando QR:', error);
+            doc.setDrawColor(colorPrimario);
+            doc.setLineWidth(0.5);
+            doc.rect(150, finalY + 20, 40, 40);
+            doc.setFontSize(8);
+            doc.setTextColor(colorGris);
+            doc.text('QR no', 170, finalY + 40, { align: 'center' });
+            doc.text('disponible', 170, finalY + 45, { align: 'center' });
+            doc.save(`Factura_${factura.numero.toString().padStart(6, '0')}.pdf`);
+        });
+}
+
+    function cerrarModal() {
+        document.getElementById("modalDetalle").style.display = "none";
+    }
+
+    function cerrarModal() { document.getElementById("modalDetalle").style.display = "none"; }
+
+    function mostrarClientes() {
+        const lista = document.getElementById("listaClientes");
+        if (!lista) return;
+        lista.innerHTML = "";
+        if (clientes.length === 0) {
+            lista.innerHTML = `<div class="lista-card"><div class="lista-info"><span>No hay clientes registrados.</span></div></div>`;
+            return;
+        }
+        clientes.forEach((cliente, i) => {
+            lista.innerHTML += `
+            <div class="lista-card">
+                <div class="lista-info">
+                    <span><b>Nombre:</b> ${cliente.nombre}</span>
+                    <span><b>Teléfono:</b> ${cliente.telefono}</span>
+                    <span><b>Correo:</b> ${cliente.correo}</span>
+                </div>
+                <div class="lista-botones">
+                    <button class="btn-warning" onclick="editarCliente(${i})">Editar</button>
+                    <button class="btn-danger" onclick="mostrarConfirmacionEliminar('¿Está seguro de eliminar el cliente ${cliente.nombre}?', 'cliente', ${i})">Eliminar</button>
+                </div>
+            </div>`;
+        });
+    }
+
+    function agregarCliente() {
+        const nombre = document.getElementById("clienteNombre").value.trim();
+        const telefono = document.getElementById("clienteTelefono").value.trim();
+        const correo = document.getElementById("clienteCorreo").value.trim();
+        if (!nombre || !telefono || !correo) {
+            mostrarNotificacion('error', 'Error', 'Complete todos los campos del cliente');
+            return;
+        }
+        if (!correo.includes('@') || !correo.includes('.')) {
+            mostrarNotificacion('error', 'Error', 'Ingrese un correo electrónico válido');
+            return;
+        }
+        if (clientes.find(c => c.correo.toLowerCase() === correo.toLowerCase())) {
+            mostrarNotificacion('error', 'Error', 'Ya existe un cliente con ese correo');
+            return;
+        }
+        clientes.push({ nombre, telefono, correo });
+        guardarClientes();
+        mostrarClientes();
+        limpiarFormularioCliente();
+        mostrarNotificacion('success', 'Éxito', 'Cliente agregado correctamente');
+    }
+
+    function editarCliente(i) {
+        const cliente = clientes[i];
+        if (!cliente) return;
+        editClienteIndex = i;
+        document.getElementById("clienteNombre").value = cliente.nombre;
+        document.getElementById("clienteTelefono").value = cliente.telefono;
+        document.getElementById("clienteCorreo").value = cliente.correo;
+        document.getElementById("tituloCliente").textContent = "Editar Cliente";
+        document.getElementById("btnAgregarCliente").style.display = "none";
+        document.getElementById("btnActualizarCliente").style.display = "inline-block";
+        document.getElementById("btnCancelarCliente").style.display = "inline-block";
+    }
+
+    function actualizarCliente() {
+        if (editClienteIndex === null) return;
+        const nombre = document.getElementById("clienteNombre").value.trim();
+        const telefono = document.getElementById("clienteTelefono").value.trim();
+        const correo = document.getElementById("clienteCorreo").value.trim();
+        if (!nombre || !telefono || !correo) {
+            mostrarNotificacion('error', 'Error', 'Complete todos los campos del cliente');
+            return;
+        }
+        if (!correo.includes('@') || !correo.includes('.')) {
+            mostrarNotificacion('error', 'Error', 'Ingrese un correo electrónico válido');
+            return;
+        }
+        if (clientes.some((c, i) => c.correo.toLowerCase() === correo.toLowerCase() && i !== editClienteIndex)) {
+            mostrarNotificacion('error', 'Error', 'Ya existe otro cliente con ese correo');
+            return;
+        }
+        clientes[editClienteIndex] = { nombre, telefono, correo };
+        guardarClientes();
+        mostrarClientes();
+        cancelarEdicionCliente();
+        mostrarNotificacion('success', 'Éxito', 'Cliente actualizado correctamente');
+    }
+
+    function cancelarEdicionCliente() {
+        editClienteIndex = null;
+        limpiarFormularioCliente();
+        document.getElementById("tituloCliente").textContent = "Gestión de Clientes";
+        document.getElementById("btnAgregarCliente").style.display = "inline-block";
+        document.getElementById("btnActualizarCliente").style.display = "none";
+        document.getElementById("btnCancelarCliente").style.display = "none";
+    }
+
+    function eliminarCliente(i) {
+        if (confirm("¿Está seguro de eliminar este cliente?")) {
+            clientes.splice(i, 1);
+            guardarClientes();
+            mostrarClientes();
+            mostrarNotificacion('success', 'Éxito', 'Cliente eliminado correctamente');
+        }
+    }
+
+    function limpiarFormularioCliente() {
+        document.getElementById("clienteNombre").value = "";
+        document.getElementById("clienteTelefono").value = "";
+        document.getElementById("clienteCorreo").value = "";
+    }
+
+    // ==================== FUNCIONES DE VENTAS ====================
+
+    // Mostrar/ocultar panel de búsqueda avanzada
+    function toggleFiltrosAvanzadosVentas() {
+        const panel = document.getElementById('ventasFiltrosAvanzados');
+        const btnText = document.getElementById('ventasFiltroToggleText');
+        
+        if (panel.style.display === 'none') {
+            panel.style.display = 'block';
+            btnText.textContent = '▲ Filtro';
+        } else {
+            panel.style.display = 'none';
+            btnText.textContent = '▼ Filtro';
+        }
+    }
+
+    // Aplicar todos los filtros (básicos + avanzados)
+    function aplicarFiltrosAvanzadosVentas() {
+        const searchTerm = document.getElementById('ventasSearchProducto')?.value.toLowerCase() || '';
+        const categoria = document.getElementById('ventasFiltroCategoria')?.value || '';
+        const presentacion = document.getElementById('ventasFiltroPresentacion')?.value || '';
+        const tamano = document.getElementById('ventasFiltroTamano')?.value || '';
+        const relleno = document.getElementById('ventasFiltroRelleno')?.value || '';
+        const cobertura = document.getElementById('ventasFiltroCobertura')?.value || '';
+        const precioMax = document.getElementById('ventasFiltroPrecioMax')?.value;
+        const stockMin = document.getElementById('ventasFiltroStockMin')?.value;
+        
+        const grid = document.getElementById('ventasProductosGrid');
+        if (!grid) return;
+        
+        // Empezar con productos disponibles
+        let productosFiltrados = productos.filter(p => p.cantidad > 0 && p.estado !== 'Agotado');
+        
+        // Filtro por búsqueda (al inicio de la palabra)
+        if (searchTerm) {
+            productosFiltrados = productosFiltrados.filter(p => 
+                p.nombre.toLowerCase().startsWith(searchTerm) ||
+                p.categoria.toLowerCase().startsWith(searchTerm)
+            );
+        }
+        
+        // Filtro por categoría
+        if (categoria) {
+            productosFiltrados = productosFiltrados.filter(p => p.categoria === categoria);
+        }
+        
+        // Filtros avanzados
+        if (presentacion) {
+            productosFiltrados = productosFiltrados.filter(p => p.presentacion === presentacion);
+        }
+        
+        if (tamano) {
+            productosFiltrados = productosFiltrados.filter(p => p.tamano === tamano);
+        }
+        
+        if (relleno) {
+            productosFiltrados = productosFiltrados.filter(p => p.relleno === relleno);
+        }
+        
+        if (cobertura) {
+            productosFiltrados = productosFiltrados.filter(p => p.cobertura === cobertura);
+        }
+        
+        if (precioMax && precioMax.trim() !== '') {
+            const max = parseFloat(precioMax);
+            if (!isNaN(max)) {
+                productosFiltrados = productosFiltrados.filter(p => p.precio <= max);
+            }
+        }
+        
+        if (stockMin && stockMin.trim() !== '') {
+            const min = parseInt(stockMin);
+            if (!isNaN(min)) {
+                productosFiltrados = productosFiltrados.filter(p => p.cantidad >= min);
+            }
+        }
+        
+        // Actualizar contador
+        const contador = document.getElementById('ventasResultadosCount');
+        if (contador) contador.textContent = productosFiltrados.length;
+        
+        // Mostrar resultados
+        if (productosFiltrados.length === 0) {
+            grid.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-secondary);grid-column:1/-1;">🔍 No se encontraron productos</div>';
+            return;
+        }
+        
+        grid.innerHTML = productosFiltrados.map(p => {
+            const imagenSrc = p.imagen || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Ctext x=\'50\' y=\'55\' font-family=\'Arial\' font-size=\'12\' fill=\'%23999\' text-anchor=\'middle\'%3E🍰%3C/text%3E%3C/svg%3E';
+            const stockClass = p.cantidad <= 10 ? 'bajo-stock-texto' : '';
+            
+            return `
+            <div class="ventas-producto-card" onclick="mostrarModalProductoVentas('${p.nombre.replace(/'/g, "\\'")}')">
+                <img src="${imagenSrc}" class="ventas-producto-imagen" alt="${p.nombre}">
+                <div class="ventas-producto-info">
+                    <div class="ventas-producto-nombre">${p.nombre}</div>
+                    <div class="ventas-producto-categoria">${p.categoria} • ${p.presentacion}</div>
+                    <div class="ventas-producto-precio" style="color: var(--text-primary);">$${p.precio.toFixed(2)}</div>
+                    <div class="ventas-producto-stock" style="color: ${p.cantidad <= 10 ? '#e74c3c' : '#27ae60'};">
+                        ${p.cantidad <= 10 ? '⚠ ' : ' '}Stock: ${p.cantidad}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // Limpiar todos los filtros avanzados
+    function limpiarFiltrosAvanzadosVentas() {
+        document.getElementById('ventasFiltroCategoria').value = '';  // 👈 AÑADE ESTA LÍNEA
+        document.getElementById('ventasFiltroPresentacion').value = '';
+        document.getElementById('ventasFiltroTamano').value = '';
+        document.getElementById('ventasFiltroRelleno').value = '';
+        document.getElementById('ventasFiltroCobertura').value = '';
+        document.getElementById('ventasFiltroPrecioMax').value = '';
+        document.getElementById('ventasFiltroStockMin').value = '';
+        
+        aplicarFiltrosAvanzadosVentas();
+    }
+
+    // Cargar catálogo inicial
+    function cargarCatalogoVentas() {
+        aplicarFiltrosAvanzadosVentas();
+    }
+
+    function limpiarBuscadorVentas() {
+        const searchInput = document.getElementById('ventasSearchProducto');
+        const clearBtn = document.getElementById('ventasClearSearch');
+        
+        if (searchInput) {
+            searchInput.value = '';
+            clearBtn.style.display = 'none';
+            filtrarProductosVentas();
+        }
+    }
+
+    // ==================== FINALIZAR COMPRA ====================
+    
+        function finalizarVentaVentas() {
+        const metodoPago = document.getElementById('ventasMetodoPago')?.value;
+        
+        console.log('💾 Guardando tempMetodoPago:', metodoPago);
+        localStorage.setItem('tempMetodoPago', metodoPago);
+
+        if (!carrito || carrito.length === 0) {
+            mostrarNotificacion('error', 'Carrito vacío', 'Agrega productos antes de finalizar');
+            return;
+        }
+        
+        const metodoPagoSelect = document.getElementById('ventasMetodoPago');
+        metodoPagoSelect.classList.remove('campo-error');
+        
+        if (!metodoPago) {
+            metodoPagoSelect.classList.add('campo-error');
+            mostrarNotificacion('error', 'Método de pago', 'Selecciona un método de pago');
+            return;
+        }
+        
+        // 🔥 ABRIR MODAL PARA DATOS DEL CLIENTE
+        document.getElementById('clienteFacturaNombre').value = '';
+        document.getElementById('clienteFacturaTelefono').value = '';
+        document.getElementById('clienteFacturaNombre').classList.remove('campo-error');
+        document.getElementById('clienteFacturaTelefono').classList.remove('campo-error');
+        
+        console.log('💾 Guardando tempMetodoPago:', metodoPago);
+        localStorage.setItem('tempMetodoPago', metodoPago);
+        
+        document.getElementById('ventasModalCliente').style.display = 'flex';
+        document.body.classList.add('modal-abierto');
+    }
+
+        function mostrarTicketVentas(factura, indiceFactura) {
+            const ticketContenido = document.getElementById('ventasTicketContenido');
+            if (!ticketContenido) return;
+            
+            let itemsHTML = factura.items.map(item => `
+                <div class="ventas-ticket-item">
+                    <span>${item.cantidad} x ${item.nombre}</span>
+                    <span>$${item.subtotal.toFixed(2)}</span>
+                </div>
+            `).join('');
+            
+            ticketContenido.innerHTML = `
+                <div class="ventas-ticket-header">
+                    <h3>🧁 Pastelería Alemana</h3>
+                    <p>Ticket de Venta</p>
+                    <p>Factura #${factura.numero.toString().padStart(6, '0')}</p>
+                    <p>${factura.fecha}</p>
+                </div>
+                <div class="ventas-ticket-items">
+                    ${itemsHTML}
+                </div>
+                <div class="ventas-ticket-total">
+                    <div class="ventas-ticket-item">
+                        <span>Método de pago:</span>
+                        <span>${factura.metodo}</span>
+                    </div>
+                    <div class="ventas-ticket-item">
+                        <strong>TOTAL:</strong>
+                        <strong>$${factura.total}</strong>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px; font-size: 12px; color: var(--text-secondary);">
+                    <p>¡Gracias por su compra!</p>
+                    <p>Productos artesanales de calidad alemana</p>
+                </div>
+            `;
+            
+            // Guardar el índice de la factura actual en un atributo data
+            document.getElementById('ventasModalTicket').setAttribute('data-indice-factura', indiceFactura);
+            
+            document.getElementById('ventasModalTicket').style.display = 'flex';
+            document.body.classList.add('modal-abierto');
+        }
+
+        function cerrarModalTicketVentas() {
+            document.getElementById('ventasModalTicket').style.display = 'none';
+            document.body.classList.remove('modal-abierto');
+        }
+
+        function imprimirTicketVentas() {
+            const modal = document.getElementById('ventasModalTicket');
+            const indiceFactura = modal.getAttribute('data-indice-factura');
+            
+            if (indiceFactura !== null && indiceFactura !== undefined && indiceFactura !== '') {
+                // Cerrar el modal del ticket
+                cerrarModalTicketVentas();
+                
+                // Generar el PDF de la factura
+                generarPDF(parseInt(indiceFactura));
+                
+                mostrarNotificacion('success', 'Factura', 'Descargando factura en PDF...');
+            } else {
+                mostrarNotificacion('error', 'Error', 'No se pudo generar la factura');
+            }
+        }
+        
+                // ==================== MODAL DE CLIENTE ====================
+        
+        function cerrarModalCliente() {
+            document.getElementById('ventasModalCliente').style.display = 'none';
+            document.body.classList.remove('modal-abierto');
+        }
+        
+        function confirmarDatosCliente() {
+            const nombre = document.getElementById('clienteFacturaNombre').value.trim();
+            const telefono = document.getElementById('clienteFacturaTelefono').value.trim();
+            
+            let hayError = false;
+            
+            // Validar nombre
+            if (!nombre) {
+                document.getElementById('clienteFacturaNombre').classList.add('campo-error');
+                hayError = true;
+            } else {
+                // Validar que solo contenga letras y espacios
+                const letrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+                if (!letrasRegex.test(nombre)) {
+                    document.getElementById('clienteFacturaNombre').classList.add('campo-error');
+                    hayError = true;
+                } else {
+                    document.getElementById('clienteFacturaNombre').classList.remove('campo-error');
+                }
+            }
+            
+            // Validar teléfono
+            if (!telefono) {
+                document.getElementById('clienteFacturaTelefono').classList.add('campo-error');
+                hayError = true;
+            } else {
+                document.getElementById('clienteFacturaTelefono').classList.remove('campo-error');
+            }
+            
+            // Mostrar notificación según el error
+            if (hayError) {
+                if (!nombre && !telefono) {
+                    mostrarNotificacion('error', 'Datos incompletos', 'Ingresa nombre y teléfono');
+                } else if (!nombre) {
+                    mostrarNotificacion('error', 'Datos incompletos', 'Ingresa el nombre del cliente');
+                } else if (!telefono) {
+                    mostrarNotificacion('error', 'Datos incompletos', 'Ingresa el teléfono del cliente');
+                }
+                return;
+            }
+            
+            document.getElementById('clienteFacturaNombre').classList.remove('campo-error');
+            document.getElementById('clienteFacturaTelefono').classList.remove('campo-error');
+            
+            localStorage.setItem('tempClienteNombre', nombre);
+            localStorage.setItem('tempClienteTelefono', telefono);
+            
+            cerrarModalCliente();
+            ejecutarVentaFinal();
+        }
+        
+        async function ejecutarVentaFinal() {
+            const metodoPago = localStorage.getItem('tempMetodoPago');
+            const nombreCliente = localStorage.getItem('tempClienteNombre') || 'Cliente General';
+            const telefonoCliente = localStorage.getItem('tempClienteTelefono') || 'No registrado';
+            
+            // Verificar stock
+            for (let item of carrito) {
+                const producto = productos.find(p => p.nombre === item.nombre);
+                if (!producto || producto.cantidad < item.cantidad) {
+                    mostrarNotificacion('error', 'Stock insuficiente', `${item.nombre}: no hay suficiente stock`);
+                    return;
+                }
+            }
+            
+            // 🔥 DESCONTAR STOCK Y ACTUALIZAR EN FIREBASE
+            for (let item of carrito) {
+                const producto = productos.find(p => p.nombre === item.nombre);
+                producto.cantidad -= item.cantidad;
+                
+                if (producto.cantidad === 0) {
+                    producto.estado = "Agotado";
+                } else if (producto.cantidad <= 10) {
+                    producto.estado = "Bajo stock";
+                } else {
+                    producto.estado = "Disponible";
+                }
+                
+                // 🔥 ACTUALIZAR EN FIREBASE
+                try {
+                    if (window.db && window.firebaseHelpers && producto.id) {
+                        const productoRef = window.firebaseHelpers.doc(window.db, "productos", producto.id);
+                        await window.firebaseHelpers.updateDoc(productoRef, {
+                            cantidad: producto.cantidad,
+                            estado: producto.estado
+                        });
+                        console.log(`✅ Stock actualizado en Firebase: ${producto.nombre} -> ${producto.cantidad}`);
+                    }
+                } catch (e) {
+                    console.error('❌ Error al actualizar stock en Firebase:', e);
+                }
+            }
+            
+            guardarProductos();
+            
+            const total = carrito.reduce((sum, item) => sum + item.subtotal, 0);
+            
+            const nuevaFactura = {
+                numero: facturas.length + 1,
+                fecha: new Date().toLocaleString(),
+                metodo: metodoPago,
+                cliente: nombreCliente,
+                telefono: telefonoCliente,
+                total: total.toFixed(2),
+                items: carrito.map(item => ({ ...item }))
+            };
+            
+            // Guardar factura localmente
+            facturas.push(nuevaFactura);
+            
+            // Guardar factura en Firebase
+            try {
+                if (window.db && window.firebaseHelpers) {
+                    await window.firebaseHelpers.addDoc(
+                        window.firebaseHelpers.collection(window.db, "facturas"), 
+                        nuevaFactura
+                    );
+                    console.log('✅ Factura guardada en Firebase');
+                }
+            } catch (e) {
+                console.warn('⚠️ Firebase no disponible, guardada localmente');
+            }
+            
+            // Mostrar ticket
+            const indiceFactura = facturas.length - 1;
+            mostrarTicketVentas(nuevaFactura, indiceFactura);
+            
+            // Limpiar carrito
+            carrito = [];
+            localStorage.removeItem('carrito');
+            localStorage.removeItem('tempMetodoPago');
+            localStorage.removeItem('tempClienteNombre');
+            localStorage.removeItem('tempClienteTelefono');
+            
+            actualizarCarritoUI();
+            aplicarFiltrosAvanzadosVentas();
+            mostrarInventario();
+            
+            document.getElementById('ventasMetodoPago').value = '';
+            
+            mostrarNotificacion('success', '¡Venta completada!', `Total: $${total.toFixed(2)}`);
+        }
+
+        // ==================== MODAL DE PRODUCTO ====================
+    
+        // Variable para guardar el producto actual del modal
+        let productoModalActual = null;
+
+        // Mostrar modal con detalles del producto
+        function mostrarModalProductoVentas(nombreProducto) {
+            const producto = productos.find(p => p.nombre === nombreProducto);
+            if (!producto) return;
+            
+            productoModalActual = producto;
+            
+            // Llenar nombre
+            document.getElementById('modalProductoNombre').textContent = producto.nombre;
+            
+            // Llenar imagen
+            const imagenSrc = producto.imagen || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Ctext x=\'50\' y=\'55\' font-family=\'Arial\' font-size=\'12\' fill=\'%23999\' text-anchor=\'middle\'%3E🍰%3C/text%3E%3C/svg%3E';
+            document.getElementById('modalProductoImagen').src = imagenSrc;
+            
+            // Llenar detalles
+            const detallesHTML = `
+                <p style="padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Categoría:</strong> ${producto.categoria}</p>
+                <p style="padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Presentación:</strong> ${producto.presentacion || 'No especificada'}</p>
+                <p style="padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Tamaño:</strong> ${producto.tamano || 'No especificado'}</p>
+                <p style="padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Relleno:</strong> ${producto.relleno || 'No especificado'}</p>
+                <p style="padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Cobertura:</strong> ${producto.cobertura || 'No especificada'}</p>
+                <p style="padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px dashed var(--border-color);"><strong>Observaciones:</strong> ${producto.observaciones || 'Sin observaciones'}</p>
+                <p style="padding-bottom: 6px; margin-bottom: 6px;"><strong>Precio:</strong> <span style="color: var(--text-primary); font-size: 20px; font-weight: 700;">$${producto.precio.toFixed(2)}</span></p>
+            `;
+            document.getElementById('modalProductoDetalles').innerHTML = detallesHTML;
+            
+            // Configurar cantidad máxima
+            const cantidadInput = document.getElementById('modalProductoCantidad');
+            cantidadInput.max = producto.cantidad;
+            cantidadInput.value = 1;
+            
+            // Mostrar stock
+            const stockSpan = document.getElementById('modalProductoStock');
+            stockSpan.textContent = `${producto.cantidad <= 10 ? '⚠ ' : ' '}Stock disponible: ${producto.cantidad}`;
+            stockSpan.style.color = producto.cantidad <= 10 ? '#e74c3c' : 'var(--text-secondary)';
+            
+            // Mostrar modal
+            document.getElementById('ventasModalProducto').style.display = 'flex';
+            document.body.classList.add('modal-abierto');
+        }
+
+        // Cerrar modal de producto
+        function cerrarModalProductoVentas() {
+            document.getElementById('ventasModalProducto').style.display = 'none';
+            document.body.classList.remove('modal-abierto');
+            productoModalActual = null;
+        }
+
+        // Agregar al carrito desde el modal
+        function agregarDesdeModalVentas() {
+            if (!productoModalActual) return;
+            
+            const cantidad = parseInt(document.getElementById('modalProductoCantidad').value);
+            
+            if (isNaN(cantidad) || cantidad <= 0) {
+                mostrarNotificacion('error', 'Error', 'Cantidad inválida');
+                return;
+            }
+            
+            if (cantidad > productoModalActual.cantidad) {
+                mostrarNotificacion('error', 'Stock insuficiente', `Solo hay ${productoModalActual.cantidad} unidades disponibles`);
+                return;
+            }
+            
+            // Buscar si el producto ya está en el carrito
+            const itemExistente = carrito.find(item => item.nombre === productoModalActual.nombre);
+            
+            if (itemExistente) {
+                // Ya existe: sumar cantidad
+                itemExistente.cantidad += cantidad;
+                itemExistente.subtotal = itemExistente.cantidad * itemExistente.precio;
+            } else {
+                // No existe: agregar nuevo
+                carrito.push({
+                    nombre: productoModalActual.nombre,
+                    precio: productoModalActual.precio,
+                    cantidad: cantidad,
+                    subtotal: cantidad * productoModalActual.precio,
+                    imagen: productoModalActual.imagen
+                });
+            }
+            
+            // Guardar carrito en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            
+            // Actualizar visualización del carrito en la interfaz
+            actualizarCarritoUI();
+            
+            mostrarNotificacion('success', '¡Agregado!', `${cantidad} x ${productoModalActual.nombre} agregado al carrito`);
+            
+            cerrarModalProductoVentas();
+        }
+
+        function actualizarCarritoUI() {
+            const carritoVacio = document.getElementById('ventasCarritoVacio');
+            const carritoItems = document.getElementById('ventasCarritoItems');
+            const carritoTotal = document.getElementById('ventasCarritoTotal');
+            const metodosPago = document.getElementById('ventasMetodosPago');
+            
+            if (!carritoVacio || !carritoItems || !carritoTotal || !metodosPago) return;
+            
+            if (carrito.length === 0) {
+                carritoVacio.style.display = 'block';
+                carritoItems.style.display = 'none';
+                carritoTotal.style.display = 'none';
+                metodosPago.style.display = 'none';
+                return;
+            }
+            
+            carritoVacio.style.display = 'none';
+            carritoItems.style.display = 'block';
+            carritoTotal.style.display = 'block';
+            metodosPago.style.display = 'block';
+            
+            let total = 0;
+            
+            carritoItems.innerHTML = carrito.map((item, index) => {
+                total += item.subtotal;
+                const imagenSrc = item.imagen || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Ctext x=\'50\' y=\'55\' font-family=\'Arial\' font-size=\'12\' fill=\'%23999\' text-anchor=\'middle\'%3E🍰%3C/text%3E%3C/svg%3E';
+                
+                return `
+                <div class="ventas-carrito-item">
+                    <div class="ventas-carrito-item-imagen">
+                        <img src="${imagenSrc}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" alt="${item.nombre}">
+                    </div>
+                    <div class="ventas-carrito-item-info">
+                        <div class="ventas-carrito-item-nombre">${item.nombre}</div>
+                        <div class="ventas-carrito-item-precio">$${item.precio.toFixed(2)} c/u</div>
+                        <div class="ventas-carrito-item-cantidad">
+                            <button onclick="cambiarCantidadCarrito(${index}, -1)">−</button>
+                            <span>${item.cantidad}</span>
+                            <button onclick="cambiarCantidadCarrito(${index}, 1)">+</button>
+                        </div>
+                        </div>
+                    <div class="ventas-carrito-item-subtotal">
+                        <span>$${item.subtotal.toFixed(2)}</span>
+                        <div class="ventas-carrito-item-eliminar" onclick="eliminarItemCarrito(${index})">🗑️</div>
+                    </div>
+                </div>`;
+            }).join('');
+            
+            carritoTotal.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Total:</span>
+                    <span class="total-monto">$${total.toFixed(2)}</span>
+                </div>
+            `;
+        }
+
+        // Cambiar cantidad en el carrito
+        function cambiarCantidadCarrito(index, cambio) {
+            const item = carrito[index];
+            if (!item) return;
+            
+            const producto = productos.find(p => p.nombre === item.nombre);
+            if (!producto) return;
+            
+            const nuevaCantidad = item.cantidad + cambio;
+            
+            // Si la cantidad llega a 0, eliminar
+            if (nuevaCantidad <= 0) {
+                eliminarItemCarrito(index);
+                return;
+            }
+            
+            // Verificar stock disponible
+            if (nuevaCantidad > producto.cantidad) {
+                mostrarNotificacion('warning', 'Stock limitado', `Solo hay ${producto.cantidad} unidades disponibles`);
+                return;
+            }
+            
+            // Actualizar cantidad y subtotal
+            item.cantidad = nuevaCantidad;
+            item.subtotal = nuevaCantidad * item.precio;
+            
+            // Guardar en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            
+            // Actualizar UI
+            actualizarCarritoUI();
+        }
+
+        // Eliminar item del carrito
+        function eliminarItemCarrito(index) {
+            const item = carrito[index];
+            if (!item) return;
+            
+            carrito.splice(index, 1);
+            
+            // Guardar en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            
+            // Actualizar UI
+            actualizarCarritoUI();
+            
+            mostrarNotificacion('info', 'Carrito', `${item.nombre} eliminado del carrito`);
+        }
+
+    function filtrarProductosVentas() {
+        const searchInput = document.getElementById('ventasSearchProducto');
+        const clearBtn = document.getElementById('ventasClearSearch');
+        
+        // Mostrar u ocultar la X según si hay texto
+        if (clearBtn) {
+            clearBtn.style.display = searchInput && searchInput.value ? 'inline' : 'none';
+        }
+        
+        const searchTerm = searchInput?.value.toLowerCase() || '';
+        const categoriaFiltro = document.getElementById('ventasFiltroCategoria')?.value || '';
+        const grid = document.getElementById('ventasProductosGrid');
+        
+        if (!grid) return;
+        
+        let productosFiltrados = productos.filter(p => p.cantidad > 0 && p.estado !== 'Agotado');
+        
+        if (searchTerm) {
+            productosFiltrados = productosFiltrados.filter(p => 
+                p.nombre.toLowerCase().startsWith(searchTerm) ||
+                p.categoria.toLowerCase().startsWith(searchTerm)
+            );
+        }
+        
+        if (categoriaFiltro) {
+            productosFiltrados = productosFiltrados.filter(p => p.categoria === categoriaFiltro);
+        }
+        
+        if (productosFiltrados.length === 0) {
+            grid.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-secondary);grid-column:1/-1;">🔍 No se encontraron productos</div>';
+            return;
+        }
+        
+        grid.innerHTML = productosFiltrados.map(p => {
+            const imagenSrc = p.imagen || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Ctext x=\'50\' y=\'55\' font-family=\'Arial\' font-size=\'12\' fill=\'%23999\' text-anchor=\'middle\'%3E🍰%3C/text%3E%3C/svg%3E';
+            const stockClass = p.cantidad <= 10 ? 'bajo-stock-texto' : '';
+            
+            return `
+            <div class="ventas-producto-card">
+                <img src="${imagenSrc}" class="ventas-producto-imagen" alt="${p.nombre}">
+                <div class="ventas-producto-info">
+                    <div class="ventas-producto-nombre">${p.nombre}</div>
+                    <div class="ventas-producto-categoria">${p.categoria} • ${p.presentacion}</div>
+                    <div class="ventas-producto-precio" style="color: var(--text-primary);">$${p.precio.toFixed(2)}</div>
+                    <div class="ventas-producto-stock" style="color: ${p.cantidad <= 10 ? '#e74c3c' : '#27ae60'};">
+                        ${p.cantidad <= 10 ? '⚠ ' : ' '}Stock: ${p.cantidad}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        initDarkMode();
+        
+        // 🔥 CARGAR DATOS DESDE FIRESTORE
+        await cargarProductosFirestore();
+        await cargarFacturasFirestore();
+        
+        actualizarEstadosProductos();
+        mostrarInventario();
+        mostrarCarrito();
+        cargarCatalogoVentas();
+        setupInputEvents();
+        
+        const carritoGuardado = localStorage.getItem('carrito');
+        if (carritoGuardado) {
+            carrito = JSON.parse(carritoGuardado);
+            actualizarCarritoUI();
+        }
+        
+        actualizarContadorCarrito();
+        
+        document.querySelectorAll('.sidebar ul li').forEach(li => {
+            if (li.textContent.trim() === 'Inventario') {
+                li.classList.add('activo');
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Pastelería Alemana | Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+        :root {
+            --bg-login: #f4f6f9;
+            --bg-container: white;
+            --text-login: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --input-border: #ddd;
+            --shadow-login: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        body.dark-mode {
+            --bg-login: #1a1a1a;
+            --bg-container: #2d2d2d;
+            --text-login: #ffffff;
+            --text-secondary: #cccccc;
+            --input-border: #404040;
+            --shadow-login: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background: var(--bg-login);
+transition: background-color 0.3s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(30px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes float{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-12px);}
+100%{transform:translateY(0px);}
+}
+
+@keyframes glow{
+0%{box-shadow:0 0 10px rgba(107,63,46,0.2);}
+50%{box-shadow:0 0 30px rgba(107,63,46,0.4);}
+100%{box-shadow:0 0 10px rgba(107,63,46,0.2);}
+}
+
+.login-container{
+width:450px;
+padding:50px;
+background: var(--bg-container);
+border-radius:20px;
+box-shadow: var(--shadow-login);
+text-align:center;
+animation:fadeIn 0.8s ease;
+transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo{
+width:150px;
+height:150px;
+margin:0 auto 25px auto;
+border-radius:50%;
+background:linear-gradient(135deg,#6b3f2e,#8b5a3c);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:60px;
+color:white;
+animation:float 3s ease-in-out infinite, glow 3s ease-in-out infinite;
+}
+
+.login-container h1{
+font-weight:700;
+color: var(--text-login);
+margin-bottom:5px;
+}
+
+.login-container h2{
+font-weight:400;
+margin-bottom:35px;
+font-size:16px;
+color: var(--text-secondary);
+}
+
+.error-message {
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+}
+
+.error-message.error {
+    background: #ffebee;
+    color: #c62828;
+    border-left: 4px solid #c62828;
+    animation: shake 0.5s ease;
+}
+
+.error-message.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-left: 4px solid #2e7d32;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.input-group{
+margin-bottom:25px;
+text-align:left;
+}
+
+.input-group input{
+width:100%;
+padding:14px;
+border:1px solid var(--input-border);
+border-radius:12px;
+outline:none;
+font-size:15px;
+transition:0.3s;
+background: var(--bg-container);
+color: var(--text-login);
+}
+
+.input-group input:focus{
+border-color:#6b3f2e;
+box-shadow:0 0 0 3px rgba(107,63,46,0.15);
+}
+
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container input {
+    width: 100%;
+    padding: 14px;
+    padding-right: 45px;
+    border: 1px solid var(--input-border);
+    border-radius: 12px;
+    outline: none;
+    font-size: 15px;
+    transition: 0.3s;
+    background: var(--bg-container);
+    color: var(--text-login);
+}
+
+.password-container input:focus {
+    border-color: #6b3f2e;
+    box-shadow: 0 0 0 3px rgba(107,63,46,0.15);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+    font-size: 18px;
+    transition: color 0.3s;
+    background: transparent;
+    border: none;
+    width: auto;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle:hover {
+    color: var(--text-login);
+    transform: translateY(-50%);
+}
+
+.password-toggle:focus {
+    outline: none;
+}
+
+.password-toggle i {
+    display: block;
+    line-height: 1;
+}
+
+button{
+width:100%;
+padding:18px;
+border:none;
+border-radius:12px;
+background:#6b3f2e;
+color:white;
+font-weight:700;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+letter-spacing:1px;
+}
+
+button:hover{
+background:#8b5a3c;
+transform:translateY(-3px);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.footer{
+margin-top:25px;
+font-size:12px;
+color: var(--text-secondary);
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 30px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+    content: "";
+}
+
+.theme-text {
+    font-size: 14px;
+    color: var(--text-login);
+    vertical-align: middle;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+<div class="logo">
+🎂
+</div>
+
+<h1>Pastelería Alemana</h1>
+<h2>Sistema de Gestión Empresarial</h2>
+
+<div id="errorMsg" class="error-message"></div>
+
+<div class="input-group">
+<input type="email" id="email" placeholder="Correo electrónico" onkeypress="handleKeyPress(event)">
+</div>
+
+<div class="input-group">
+<div class="password-container">
+    <input type="password" id="password" placeholder="Contraseña" onkeypress="handleKeyPress(event)">
+    <button type="button" class="password-toggle" onclick="togglePassword()" id="togglePassword">
+        <i class="far fa-eye" id="eyeIcon"></i>
+    </button>
+</div>
+</div>
+
+<button onclick="login()">INICIAR SESIÓN</button>
+
+<div class="footer">
+© 2026 Pastelería Alemana
+</div>
+
+</div>
+
+<div style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; background: var(--bg-container); padding: 10px 15px; border-radius: 50px; box-shadow: var(--shadow-login); transition: background-color 0.3s ease, box-shadow 0.3s ease;">
+    <label class="theme-switch">
+        <input type="checkbox" id="themeToggle" onchange="toggleDarkMode()">
+        <span class="slider"></span>
+    </label>
+    <span class="theme-text">Modo oscuro</span>
+</div>
+
+<script>
+
+if (!localStorage.getItem("usuarios")) {
+    const usuariosIniciales = [
+        { email: "inventario@alemana.com", password: "1234", rol: "inventario" },
+        { email: "ventas@alemana.com", password: "1234", rol: "ventas" },
+        { email: "gerente@alemana.com", password: "1234", rol: "gerente" }
+    ];
+    localStorage.setItem("usuarios", JSON.stringify(usuariosIniciales));
+}
+
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+}
+
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        login();
+    }
+}
+
+function login(){
+    const email = document.getElementById("email").value.trim().toLowerCase();
+    const password = document.getElementById("password").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
+
+    if(email === "" || password === ""){
+        errorMsg.textContent = "Por favor complete todos los campos";
+        errorMsg.className = "error-message error";
+        errorMsg.style.display = "block";
+        
+        errorMsg.style.animation = 'none';
+        errorMsg.offsetHeight;
+        errorMsg.style.animation = 'shake 0.5s ease';
+        return;
+    }
+
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    const usuarioEncontrado = usuarios.find(user =>
+        user.email.toLowerCase() === email &&
+        user.password === password
+    );
+
+    if(usuarioEncontrado){
+        errorMsg.textContent = "¡Inicio de sesión exitoso! Redirigiendo...";
+        errorMsg.className = "error-message success";
+        errorMsg.style.display = "block";
+        
+        localStorage.setItem("usuarioActivo", JSON.stringify(usuarioEncontrado));
+        
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1000);
+    }
+    
+    else{
+        errorMsg.textContent = "Correo o contraseña incorrectos";
+        errorMsg.className = "error-message error";
+        errorMsg.style.display = "block";
+        
+        errorMsg.style.animation = 'none';
+        errorMsg.offsetHeight;
+        errorMsg.style.animation = 'shake 0.5s ease';
+        
+        document.getElementById("password").value = "";
+    }
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode);
+    
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.checked = isDarkMode;
+    }
+}
+
+function initDarkMode() {
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (savedDarkMode) {
+        document.body.classList.add('dark-mode');
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.checked = true;
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initDarkMode();
+});
+</script>
+
+</body>
+</html>
